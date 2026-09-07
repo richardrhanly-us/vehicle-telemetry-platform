@@ -200,12 +200,108 @@
             color: #d1d5db;
         }
 
+
+        .alarm-section {
+            margin-top: 24px;
+        }
+
+        .alarm-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .alarm-count-card {
+            background: #111827;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .alarm-count-label {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .alarm-count-value {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .alarm-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .alarm-event {
+            background: #111827;
+            border: 1px solid #374151;
+            border-left-width: 4px;
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+
+        .alarm-event.triggered {
+            border-left-color: #f59e0b;
+        }
+
+        .alarm-event.cleared {
+            border-left-color: #10b981;
+        }
+
+        .alarm-event-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .alarm-event-title {
+            font-weight: 700;
+        }
+
+        .alarm-event-time {
+            color: #9ca3af;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .alarm-event-meta {
+            color: #d1d5db;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .alarm-badge {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .alarm-badge.triggered {
+            background: rgba(245, 158, 11, 0.16);
+            color: #fbbf24;
+        }
+
+        .alarm-badge.cleared {
+            background: rgba(16, 185, 129, 0.16);
+            color: #34d399;
+        }
+
         @media (max-width: 1000px) {
             .layout {
                 grid-template-columns: 1fr;
             }
 
-            .summary-grid {
+            .summary-grid,
+            .alarm-summary {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -221,6 +317,7 @@
             }
 
             .summary-grid,
+            .alarm-summary,
             .charts {
                 grid-template-columns: 1fr;
             }
@@ -540,7 +637,8 @@
                 renderTrip(
                     trip.trip_id,
                     trip.metadata,
-                    trip.samples
+                    trip.samples,
+                    trip.events || []
                 );
 
             } catch (error) {
@@ -553,10 +651,74 @@
         }
 
 
+
+        function renderAlarmTimeline(events) {
+            const alarmList =
+                document.getElementById("alarm-list");
+
+            if (!alarmList) {
+                return;
+            }
+
+            if (!events || !events.length) {
+                alarmList.innerHTML = `
+                    <div class="placeholder">
+                        No alarm events recorded for this trip.
+                    </div>
+                `;
+                return;
+            }
+
+            alarmList.innerHTML = events.map(event => {
+                const eventType =
+                    event.type === "cleared"
+                        ? "cleared"
+                        : "triggered";
+
+                const value =
+                    event.value === null ||
+                    event.value === undefined
+                        ? "N/A"
+                        : event.value;
+
+                const threshold =
+                    `${event.operator ?? ""}${event.threshold ?? ""}`;
+
+                return `
+                    <div class="alarm-event ${eventType}">
+                        <div class="alarm-event-top">
+                            <div>
+                                <span class="alarm-event-title">
+                                    ${event.rule ?? "Alarm"}
+                                </span>
+                                <span class="alarm-badge ${eventType}">
+                                    ${eventType}
+                                </span>
+                            </div>
+                            <div class="alarm-event-time">
+                                ${formatDateTime(event.timestamp)}
+                            </div>
+                        </div>
+                        <div class="alarm-event-meta">
+                            Severity: ${event.severity ?? "N/A"}
+                            · Field: ${event.field ?? "N/A"}
+                            · Value: ${value}
+                            · Threshold: ${threshold || "N/A"}
+                            · Sequence: ${event.sequence ?? "N/A"}
+                            · Active: ${formatDuration(
+                                event.duration_seconds ?? 0
+                            )}
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
         function renderTrip(
             tripId,
             metadata,
-            samples
+            samples,
+            events
         ) {
             destroyCharts();
 
@@ -752,6 +914,44 @@
 
                 </div>
 
+
+                <div class="alarm-section">
+                    <div class="panel-title">
+                        Alarm Timeline
+                    </div>
+
+                    <div class="alarm-summary">
+                        <div class="alarm-count-card">
+                            <div class="alarm-count-label">
+                                Total Events
+                            </div>
+                            <div class="alarm-count-value">
+                                ${metadata.alarm_event_count ?? events.length ?? 0}
+                            </div>
+                        </div>
+
+                        <div class="alarm-count-card">
+                            <div class="alarm-count-label">
+                                Triggered
+                            </div>
+                            <div class="alarm-count-value">
+                                ${metadata.alarm_trigger_count ?? 0}
+                            </div>
+                        </div>
+
+                        <div class="alarm-count-card">
+                            <div class="alarm-count-label">
+                                Cleared
+                            </div>
+                            <div class="alarm-count-value">
+                                ${metadata.alarm_clear_count ?? 0}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="alarm-list" class="alarm-list"></div>
+                </div>
+
                 <div class="health">
 
                     <div class="panel-title">
@@ -810,6 +1010,8 @@
 
                 </div>
             `;
+
+            renderAlarmTimeline(events);
 
             rpmChart = createHistoryChart(
                 "rpm-history-chart",

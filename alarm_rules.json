@@ -1,0 +1,20 @@
+{
+  "rules": [
+    {
+      "name": "High RPM",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 4000,
+      "duration_seconds": 2,
+      "severity": "warning"
+    },
+    {
+      "name": "High Engine Load",
+      "field": "load_pct",
+      "operator": ">",
+      "threshold": 90,
+      "duration_seconds": 3,
+      "severity": "warning"
+    }
+  ]
+}

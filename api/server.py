@@ -3,20 +3,13 @@ import json
 from contextlib import suppress
 from pathlib import Path
 
-from fastapi import (
-    FastAPI,
-    HTTPException,
-    WebSocket,
-    WebSocketDisconnect,
-)
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
 import telemetry.runtime_state as runtime_state
 from telemetry.trip_controller import trip_controller
 
-
 app = FastAPI()
-
 
 DASHBOARD_FILE = Path(__file__).parent / "dashboard.html"
 TRIPS_PAGE_FILE = Path(__file__).parent / "trips.html"
@@ -25,39 +18,22 @@ TRIPS_DIR = Path("data") / "trips"
 
 def get_trip_id(metadata_file):
     filename = metadata_file.name
-
-    return filename.removeprefix(
-        "trip_"
-    ).removesuffix(
-        "_metadata.json"
-    )
+    return filename.removeprefix("trip_").removesuffix("_metadata.json")
 
 
 def load_json_file(file_path):
     try:
-        with open(
-            file_path,
-            "r",
-            encoding="utf-8",
-        ) as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             return json.load(file)
-
-    except (
-        OSError,
-        json.JSONDecodeError,
-    ):
+    except (OSError, json.JSONDecodeError):
         return None
 
 
-def load_trip_samples(file_path):
-    samples = []
+def load_jsonl_file(file_path):
+    items = []
 
     try:
-        with open(
-            file_path,
-            "r",
-            encoding="utf-8",
-        ) as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             for line in file:
                 line = line.strip()
 
@@ -65,22 +41,24 @@ def load_trip_samples(file_path):
                     continue
 
                 try:
-                    sample = json.loads(line)
-                    samples.append(sample)
-
+                    items.append(json.loads(line))
                 except json.JSONDecodeError:
                     continue
-
     except OSError:
         return []
 
-    return samples
+    return items
 
 
-def build_trip_summary(
-    trip_id,
-    metadata,
-):
+def load_trip_samples(file_path):
+    return load_jsonl_file(file_path)
+
+
+def load_trip_events(file_path):
+    return load_jsonl_file(file_path)
+
+
+def build_trip_summary(trip_id, metadata):
     vehicle = metadata.get("vehicle")
 
     if vehicle is None:
@@ -92,62 +70,49 @@ def build_trip_summary(
 
     return {
         "trip_id": trip_id,
-        "start_time": metadata.get(
-            "start_time"
-        ),
-        "end_time": metadata.get(
-            "end_time"
-        ),
-        "duration_seconds": metadata.get(
-            "duration_seconds"
-        ),
-        "sample_count": metadata.get(
-            "sample_count"
-        ),
-        "distance_miles": metadata.get(
-            "distance_miles"
-        ),
+        "start_time": metadata.get("start_time"),
+        "end_time": metadata.get("end_time"),
+        "duration_seconds": metadata.get("duration_seconds"),
+        "sample_count": metadata.get("sample_count"),
+        "distance_miles": metadata.get("distance_miles"),
         "vehicle": vehicle,
-        "max_rpm": metadata.get(
-            "max_rpm"
+        "max_rpm": metadata.get("max_rpm"),
+        "max_speed_mph": metadata.get("max_speed_mph"),
+        "average_rpm": metadata.get("average_rpm"),
+        "average_speed_mph": metadata.get("average_speed_mph"),
+        "average_sample_duration_ms": metadata.get(
+            "average_sample_duration_ms"
         ),
-        "max_speed_mph": metadata.get(
-            "max_speed_mph"
+        "average_sample_rate_hz": metadata.get(
+            "average_sample_rate_hz"
         ),
-        "average_rpm": metadata.get(
-            "average_rpm"
+        "total_missing_values": metadata.get(
+            "total_missing_values"
         ),
-        "average_speed_mph": metadata.get(
-            "average_speed_mph"
+        "total_query_failures": metadata.get(
+            "total_query_failures"
         ),
-        "average_sample_duration_ms":
-            metadata.get(
-                "average_sample_duration_ms"
-            ),
-        "average_sample_rate_hz":
-            metadata.get(
-                "average_sample_rate_hz"
-            ),
-        "total_missing_values":
-            metadata.get(
-                "total_missing_values"
-            ),
-        "total_query_failures":
-            metadata.get(
-                "total_query_failures"
-            ),
-        "moving_time_seconds":
-            metadata.get(
-                "moving_time_seconds"
-            ),
-        "stopped_time_seconds":
-            metadata.get(
-                "stopped_time_seconds"
-            ),
-        "average_moving_speed_mph":
-            metadata.get(
-                "average_moving_speed_mph"
-            ),
+        "moving_time_seconds": metadata.get(
+            "moving_time_seconds"
+        ),
+        "stopped_time_seconds": metadata.get(
+            "stopped_time_seconds"
+        ),
+        "average_moving_speed_mph": metadata.get(
+            "average_moving_speed_mph"
+        ),
+        "alarm_event_count": metadata.get(
+            "alarm_event_count",
+            0,
+        ),
+        "alarm_trigger_count": metadata.get(
+            "alarm_trigger_count",
+            0,
+        ),
+        "alarm_clear_count": metadata.get(
+            "alarm_clear_count",
+            0,
+        ),
     }
 
 
@@ -180,9 +145,7 @@ def get_vehicle_status():
 
 
 @app.post("/api/vehicle/scan")
-def scan_vehicle(
-    interactive: bool = False,
-):
+def scan_vehicle(interactive: bool = False):
     started = trip_controller.scan_vehicle(
         interactive=interactive,
     )
@@ -212,9 +175,7 @@ def start_trip():
         status = trip_controller.get_status()
 
         if not status["vehicle_ready"]:
-            detail = (
-                "No vehicle has been identified."
-            )
+            detail = "No vehicle has been identified."
         else:
             detail = (
                 "A trip or vehicle scan "
@@ -248,22 +209,17 @@ def get_trips():
         return []
 
     trips = []
-
     metadata_files = TRIPS_DIR.glob(
         "trip_*_metadata.json"
     )
 
     for metadata_file in metadata_files:
-        metadata = load_json_file(
-            metadata_file
-        )
+        metadata = load_json_file(metadata_file)
 
         if metadata is None:
             continue
 
-        trip_id = get_trip_id(
-            metadata_file
-        )
+        trip_id = get_trip_id(metadata_file)
 
         trip = build_trip_summary(
             trip_id,
@@ -304,15 +260,18 @@ def get_trip(trip_id: str):
         / f"trip_{trip_id}.jsonl"
     )
 
+    events_file = (
+        TRIPS_DIR
+        / f"trip_{trip_id}_events.jsonl"
+    )
+
     if not metadata_file.exists():
         raise HTTPException(
             status_code=404,
             detail="Trip not found.",
         )
 
-    metadata = load_json_file(
-        metadata_file
-    )
+    metadata = load_json_file(metadata_file)
 
     if metadata is None:
         raise HTTPException(
@@ -321,11 +280,12 @@ def get_trip(trip_id: str):
         )
 
     samples = []
-
     if trip_file.exists():
-        samples = load_trip_samples(
-            trip_file
-        )
+        samples = load_trip_samples(trip_file)
+
+    events = []
+    if events_file.exists():
+        events = load_trip_events(events_file)
 
     trip_summary = build_trip_summary(
         trip_id,
@@ -341,13 +301,12 @@ def get_trip(trip_id: str):
         "trip_id": trip_id,
         "metadata": trip_summary,
         "samples": samples,
+        "events": events,
     }
 
 
 @app.websocket("/ws/telemetry")
-async def telemetry_websocket(
-    websocket: WebSocket
-):
+async def telemetry_websocket(websocket: WebSocket):
     await websocket.accept()
 
     last_sequence_sent = None
@@ -380,8 +339,7 @@ async def telemetry_websocket(
 
             if runtime_state.latest_sample is not None:
                 current_sequence = (
-                    runtime_state
-                    .latest_sample["sequence"]
+                    runtime_state.latest_sample["sequence"]
                 )
 
                 if (
@@ -392,9 +350,7 @@ async def telemetry_websocket(
                         runtime_state.latest_sample
                     )
 
-                    last_sequence_sent = (
-                        current_sequence
-                    )
+                    last_sequence_sent = current_sequence
 
     except WebSocketDisconnect:
         pass
@@ -408,6 +364,4 @@ async def telemetry_websocket(
             ):
                 await disconnect_task
 
-        print(
-            "Telemetry WebSocket closed."
-        )
+        print("Telemetry WebSocket closed.")
