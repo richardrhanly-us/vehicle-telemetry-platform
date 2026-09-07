@@ -5,6 +5,8 @@ from time import perf_counter
 import os
 import obd
 
+from dotenv import load_dotenv
+
 from telemetry.logger import (
 
     create_trip_files,
@@ -32,6 +34,9 @@ from telemetry.vehicle import identify_vehicle
 
 
 CONNECTION_FAILURE_THRESHOLD = 2
+
+load_dotenv()
+
 OBD_PORT = os.getenv("OBD_PORT", "COM3")
 
 RPM_COMMAND = getattr(obd.commands, "RPM")
