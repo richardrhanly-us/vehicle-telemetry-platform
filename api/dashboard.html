@@ -142,6 +142,65 @@
             color: #fecaca;
         }
 
+
+        .live-alarm-panel {
+            display: none;
+            margin: 0 0 24px 0;
+            border-radius: 12px;
+            padding: 16px 18px;
+            border: 1px solid #92400e;
+            border-left: 5px solid #f59e0b;
+            background: #2a1f0f;
+        }
+
+        .live-alarm-panel.active {
+            display: block;
+        }
+
+        .live-alarm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .live-alarm-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fde68a;
+        }
+
+        .live-alarm-badge {
+            border-radius: 999px;
+            padding: 4px 9px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: #92400e;
+            color: #fef3c7;
+        }
+
+        .live-alarm-details {
+            color: #fef3c7;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .alarm-clear-message {
+            display: none;
+            margin: 0 0 24px 0;
+            border-radius: 10px;
+            padding: 12px 14px;
+            border-left: 4px solid #10b981;
+            background: #0f2d26;
+            color: #a7f3d0;
+        }
+
+        .alarm-clear-message.active {
+            display: block;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(250px, 1fr));
@@ -327,6 +386,21 @@
 
         </div>
 
+
+        <div id="live-alarm-panel" class="live-alarm-panel">
+            <div class="live-alarm-header">
+                <div id="live-alarm-title" class="live-alarm-title">
+                    Active Alarm
+                </div>
+                <div id="live-alarm-badge" class="live-alarm-badge">
+                    Warning
+                </div>
+            </div>
+            <div id="live-alarm-details" class="live-alarm-details"></div>
+        </div>
+
+        <div id="alarm-clear-message" class="alarm-clear-message"></div>
+
         <div class="grid">
 
             <div class="card">
@@ -463,6 +537,8 @@
         let currentTripState = "idle";
         let currentVehicleState = "waiting";
         let vehicleReady = false;
+        let lastAlarmEventKey = null;
+        let alarmClearTimer = null;
 
 
         function formatMake(make) {
@@ -687,6 +763,116 @@
         }
 
 
+
+        function formatAlarmValue(value) {
+            if (
+                value === null
+                || value === undefined
+            ) {
+                return "N/A";
+            }
+
+            return value;
+        }
+
+
+        function renderLiveAlarms(
+            activeAlarms,
+            latestAlarmEvent
+        ) {
+            const panel =
+                document.getElementById(
+                    "live-alarm-panel"
+                );
+
+            const title =
+                document.getElementById(
+                    "live-alarm-title"
+                );
+
+            const badge =
+                document.getElementById(
+                    "live-alarm-badge"
+                );
+
+            const details =
+                document.getElementById(
+                    "live-alarm-details"
+                );
+
+            const clearMessage =
+                document.getElementById(
+                    "alarm-clear-message"
+                );
+
+            if (
+                activeAlarms
+                && activeAlarms.length > 0
+            ) {
+                const alarm = activeAlarms[0];
+
+                title.textContent =
+                    alarm.rule || "Active Alarm";
+
+                badge.textContent =
+                    alarm.severity || "warning";
+
+                details.textContent =
+                    `${alarm.field || "value"} `
+                    + `${formatAlarmValue(alarm.value)} `
+                    + `${alarm.operator || ""}`
+                    + `${formatAlarmValue(alarm.threshold)}`;
+
+                panel.classList.add("active");
+
+            } else {
+                panel.classList.remove("active");
+            }
+
+            if (!latestAlarmEvent) {
+                return;
+            }
+
+            const eventKey =
+                `${latestAlarmEvent.type}|`
+                + `${latestAlarmEvent.rule}|`
+                + `${latestAlarmEvent.timestamp}`;
+
+            if (eventKey === lastAlarmEventKey) {
+                return;
+            }
+
+            lastAlarmEventKey = eventKey;
+
+            if (
+                latestAlarmEvent.type
+                === "cleared"
+            ) {
+                clearMessage.textContent =
+                    `${latestAlarmEvent.rule} cleared`;
+
+                clearMessage.classList.add(
+                    "active"
+                );
+
+                if (alarmClearTimer) {
+                    clearTimeout(
+                        alarmClearTimer
+                    );
+                }
+
+                alarmClearTimer = setTimeout(
+                    function () {
+                        clearMessage.classList.remove(
+                            "active"
+                        );
+                    },
+                    4000
+                );
+            }
+        }
+
+
         function renderStatus(
             tripStatus,
             vehicleStatus
@@ -699,6 +885,11 @@
 
             vehicleReady =
                 vehicleStatus.ready;
+
+            renderLiveAlarms(
+                tripStatus.active_alarms || [],
+                tripStatus.latest_alarm_event || null
+            );
 
             renderVehicle(
                 vehicleStatus.vehicle

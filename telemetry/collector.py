@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 
 from pathlib import Path
 
-from time import perf_counter
+from time import perf_counter, sleep
+from threading import RLock
 
 import obd
 
@@ -30,6 +31,8 @@ from telemetry.normalizer import (
 from telemetry.vehicle import identify_vehicle
 
 CONNECTION_FAILURE_THRESHOLD = 2
+CONNECTION_ATTEMPTS = 3
+CONNECTION_RETRY_DELAY_SECONDS = 1.0
 
 load_dotenv()
 
@@ -45,19 +48,45 @@ THROTTLE_COMMAND = getattr(obd.commands, "THROTTLE_POS")
 
 ENGINE_LOAD_COMMAND = getattr(obd.commands, "ENGINE_LOAD")
 
+OBD_CONNECTION_LOCK = RLock()
+
 
 def connect_to_vehicle():
 
-    print(f"Connecting to OBD-II adapter on {OBD_PORT}...")
+    last_connection = None
 
-    connection = obd.OBD(OBD_PORT)
+    for attempt in range(1, CONNECTION_ATTEMPTS + 1):
+        if attempt == 1:
+            print(
+                f"Connecting to OBD-II adapter on {OBD_PORT}..."
+            )
+        else:
+            print(
+                "Retrying OBD-II connection "
+                f"({attempt}/{CONNECTION_ATTEMPTS})..."
+            )
 
-    print(
-        "Connection status:",
-        connection.status(),
-    )
+        connection = obd.OBD(OBD_PORT)
 
-    return connection
+        print(
+            "Connection status:",
+            connection.status(),
+        )
+
+        if connection.is_connected():
+            return connection
+
+        last_connection = connection
+
+        if attempt < CONNECTION_ATTEMPTS:
+            connection.close()
+            last_connection = None
+            sleep(CONNECTION_RETRY_DELAY_SECONDS)
+
+    if last_connection is not None:
+        return last_connection
+
+    return obd.OBD(OBD_PORT)
 
 
 def check_vehicle_connection():
@@ -77,24 +106,25 @@ def check_vehicle_connection():
 
     connection = None
 
-    try:
-        connection = obd.OBD(
-            OBD_PORT,
-            fast=True,
-        )
+    with OBD_CONNECTION_LOCK:
+        try:
+            connection = obd.OBD(
+                OBD_PORT,
+                fast=True,
+            )
 
-        return connection.is_connected()
+            return connection.is_connected()
 
-    except Exception:  # noqa: BLE001
-        return False
+        except Exception:  # noqa: BLE001
+            return False
 
-    finally:
-        if connection is not None:
-            try:
-                connection.close()
+        finally:
+            if connection is not None:
+                try:
+                    connection.close()
 
-            except Exception:  # noqa: BLE001
-                pass  # noqa: S110
+                except Exception:  # noqa: BLE001
+                    pass  # noqa: S110
 
 
 def scan_for_vehicle(
@@ -103,34 +133,35 @@ def scan_for_vehicle(
 
     connection = None
 
-    try:
-        connection = connect_to_vehicle()
+    with OBD_CONNECTION_LOCK:
+        try:
+            connection = connect_to_vehicle()
 
-        if not connection.is_connected():
-            print("No vehicle detected.")
+            if not connection.is_connected():
+                print("No vehicle detected.")
 
-            return None
+                return None
 
-        vehicle = identify_vehicle(
-            connection,
-            allow_profile_prompt=allow_profile_prompt,
-        )
-
-        if vehicle is not None:
-            print(
-                "Vehicle:",
-                vehicle.year,
-                vehicle.make,
-                vehicle.model,
+            vehicle = identify_vehicle(
+                connection,
+                allow_profile_prompt=allow_profile_prompt,
             )
 
-        return vehicle
+            if vehicle is not None:
+                print(
+                    "Vehicle:",
+                    vehicle.year,
+                    vehicle.make,
+                    vehicle.model,
+                )
 
-    finally:
-        if connection is not None:
-            connection.close()
+            return vehicle
 
-            print("Vehicle scan connection closed.")
+        finally:
+            if connection is not None:
+                connection.close()
+
+                print("Vehicle scan connection closed.")
 
 
 def safe_query(
@@ -248,222 +279,224 @@ def run_collector(
     on_alarm=None,
 ):
 
-    connection = None
+    with OBD_CONNECTION_LOCK:
 
-    try:
-        connection = connect_to_vehicle()
+        connection = None
 
-        if not connection.is_connected():
-            raise RuntimeError("Vehicle is no longer connected.")
+        try:
+            connection = connect_to_vehicle()
 
-        alarm_engine = AlarmEngine.from_json_file(ALARM_RULES_PATH)
+            if not connection.is_connected():
+                raise RuntimeError("Vehicle is no longer connected.")
 
-        print(f"Loaded {len(alarm_engine.rules)} alarm rules.")
+            alarm_engine = AlarmEngine.from_json_file(ALARM_RULES_PATH)
 
-        trip_file, metadata_file, events_file = create_trip_files()
+            print(f"Loaded {len(alarm_engine.rules)} alarm rules.")
 
-        print(
-            "Recording trip to:",
-            trip_file,
-        )
-
-        start_time = datetime.now(timezone.utc)
-
-        sequence = 0
-
-        previous_timestamp = None
-
-        previous_speed_mph = None
-
-        distance_miles = 0.0
-
-        moving_time_seconds = 0.0
-
-        stopped_time_seconds = 0.0
-
-        max_rpm = None
-
-        max_speed_mph = None
-
-        total_rpm = 0
-
-        total_speed_mph = 0
-
-        total_sample_duration_ms = 0
-
-        total_sample_rate_hz = 0
-
-        sample_rate_count = 0
-
-        total_missing_values = 0
-
-        total_query_failures = 0
-
-        alarm_event_count = 0
-
-        alarm_trigger_count = 0
-
-        alarm_clear_count = 0
-
-        consecutive_connection_failures = 0
-
-        while not stop_event.is_set():
-            sequence += 1
-
-            sample = collect_sample(
-                connection,
-                sequence,
-                previous_timestamp,
-            )
-
-            connection_lost = (
-                not connection.is_connected() or sample.query_failures == 4
-            )
-
-            if connection_lost:
-                consecutive_connection_failures += 1
-
-            else:
-                consecutive_connection_failures = 0
-
-            if consecutive_connection_failures >= CONNECTION_FAILURE_THRESHOLD:
-                raise RuntimeError("OBD-II vehicle disconnected.")
-
-            if sample.query_failures < 4:
-                alarm_events = alarm_engine.evaluate(sample)
-
-                for event in alarm_events:
-                    log_alarm_event(events_file, event)
-
-                    alarm_event_count += 1
-
-                    if event["type"] == "triggered":
-                        alarm_trigger_count += 1
-
-                    elif event["type"] == "cleared":
-                        alarm_clear_count += 1
-
-                    print(
-                        f"[ALARM {event['type'].upper()}] "
-                        f"{event['severity'].upper()} "
-                        f"{event['rule']} "
-                        f"value={event['value']} "
-                        f"threshold={event['operator']}{event['threshold']}"
-                    )
-
-                    if on_alarm is not None:
-                        on_alarm(event)
-
-            if (
-                previous_timestamp is not None
-                and previous_speed_mph is not None
-                and sample.speed_mph is not None
-            ):
-                elapsed_seconds = (
-                    sample.timestamp - previous_timestamp
-                ).total_seconds()
-
-                average_segment_speed_mph = (previous_speed_mph + sample.speed_mph) / 2
-
-                distance_miles += average_segment_speed_mph * (elapsed_seconds / 3600)
-
-                if average_segment_speed_mph > 0:
-                    moving_time_seconds += elapsed_seconds
-
-                else:
-                    stopped_time_seconds += elapsed_seconds
-
-            previous_timestamp = sample.timestamp
-
-            previous_speed_mph = sample.speed_mph
-
-            log_sample(
-                trip_file,
-                sample,
-            )
-
-            if on_sample is not None:
-                on_sample(sample)
-
-            total_sample_duration_ms += sample.sample_duration_ms
-
-            if sample.sample_rate_hz is not None:
-                total_sample_rate_hz += sample.sample_rate_hz
-
-                sample_rate_count += 1
-
-            total_missing_values += sample.missing_values
-
-            total_query_failures += sample.query_failures
-
-            if sample.rpm is not None:
-                total_rpm += sample.rpm
-
-                if max_rpm is None or sample.rpm > max_rpm:
-                    max_rpm = sample.rpm
-
-            if sample.speed_mph is not None:
-                total_speed_mph += sample.speed_mph
-
-                if max_speed_mph is None or sample.speed_mph > max_speed_mph:
-                    max_speed_mph = sample.speed_mph
+            trip_file, metadata_file, events_file = create_trip_files()
 
             print(
-                f"[{sample.sequence:04}] "
-                f"{sample.timestamp.isoformat()} "
-                f"RPM="
-                f"{sample.rpm if sample.rpm is not None else 'N/A'} "
-                f"SPEED_MPH="
-                f"{sample.speed_mph if sample.speed_mph is not None else 'N/A'} "
-                f"THROTTLE_PCT="
-                f"{sample.throttle_pct if sample.throttle_pct is not None else 'N/A'} "
-                f"LOAD_PCT="
-                f"{sample.load_pct if sample.load_pct is not None else 'N/A'} "
-                f"DURATION_MS="
-                f"{sample.sample_duration_ms} "
-                f"RATE_HZ="
-                f"{sample.sample_rate_hz if sample.sample_rate_hz is not None else 'N/A'} "
-                f"MISSING="
-                f"{sample.missing_values} "
-                f"FAILURES="
-                f"{sample.query_failures}"
+                "Recording trip to:",
+                trip_file,
             )
 
-            stop_event.wait(1)
+            start_time = datetime.now(timezone.utc)
 
-    finally:
-        if connection is not None:
-            if "start_time" in locals():
-                end_time = datetime.now(timezone.utc)
+            sequence = 0
 
-                write_trip_metadata(
-                    metadata_file,
-                    start_time,
-                    end_time,
+            previous_timestamp = None
+
+            previous_speed_mph = None
+
+            distance_miles = 0.0
+
+            moving_time_seconds = 0.0
+
+            stopped_time_seconds = 0.0
+
+            max_rpm = None
+
+            max_speed_mph = None
+
+            total_rpm = 0
+
+            total_speed_mph = 0
+
+            total_sample_duration_ms = 0
+
+            total_sample_rate_hz = 0
+
+            sample_rate_count = 0
+
+            total_missing_values = 0
+
+            total_query_failures = 0
+
+            alarm_event_count = 0
+
+            alarm_trigger_count = 0
+
+            alarm_clear_count = 0
+
+            consecutive_connection_failures = 0
+
+            while not stop_event.is_set():
+                sequence += 1
+
+                sample = collect_sample(
+                    connection,
                     sequence,
-                    max_rpm,
-                    max_speed_mph,
-                    total_rpm,
-                    total_speed_mph,
-                    total_sample_duration_ms,
-                    total_sample_rate_hz,
-                    sample_rate_count,
-                    total_missing_values,
-                    total_query_failures,
-                    vehicle,
-                    distance_miles,
-                    moving_time_seconds,
-                    stopped_time_seconds,
-                    alarm_event_count,
-                    alarm_trigger_count,
-                    alarm_clear_count,
+                    previous_timestamp,
                 )
+
+                connection_lost = (
+                    not connection.is_connected() or sample.query_failures == 4
+                )
+
+                if connection_lost:
+                    consecutive_connection_failures += 1
+
+                else:
+                    consecutive_connection_failures = 0
+
+                if consecutive_connection_failures >= CONNECTION_FAILURE_THRESHOLD:
+                    raise RuntimeError("OBD-II vehicle disconnected.")
+
+                if sample.query_failures < 4:
+                    alarm_events = alarm_engine.evaluate(sample)
+
+                    for event in alarm_events:
+                        log_alarm_event(events_file, event)
+
+                        alarm_event_count += 1
+
+                        if event["type"] == "triggered":
+                            alarm_trigger_count += 1
+
+                        elif event["type"] == "cleared":
+                            alarm_clear_count += 1
+
+                        print(
+                            f"[ALARM {event['type'].upper()}] "
+                            f"{event['severity'].upper()} "
+                            f"{event['rule']} "
+                            f"value={event['value']} "
+                            f"threshold={event['operator']}{event['threshold']}"
+                        )
+
+                        if on_alarm is not None:
+                            on_alarm(event)
+
+                if (
+                    previous_timestamp is not None
+                    and previous_speed_mph is not None
+                    and sample.speed_mph is not None
+                ):
+                    elapsed_seconds = (
+                        sample.timestamp - previous_timestamp
+                    ).total_seconds()
+
+                    average_segment_speed_mph = (previous_speed_mph + sample.speed_mph) / 2
+
+                    distance_miles += average_segment_speed_mph * (elapsed_seconds / 3600)
+
+                    if average_segment_speed_mph > 0:
+                        moving_time_seconds += elapsed_seconds
+
+                    else:
+                        stopped_time_seconds += elapsed_seconds
+
+                previous_timestamp = sample.timestamp
+
+                previous_speed_mph = sample.speed_mph
+
+                log_sample(
+                    trip_file,
+                    sample,
+                )
+
+                if on_sample is not None:
+                    on_sample(sample)
+
+                total_sample_duration_ms += sample.sample_duration_ms
+
+                if sample.sample_rate_hz is not None:
+                    total_sample_rate_hz += sample.sample_rate_hz
+
+                    sample_rate_count += 1
+
+                total_missing_values += sample.missing_values
+
+                total_query_failures += sample.query_failures
+
+                if sample.rpm is not None:
+                    total_rpm += sample.rpm
+
+                    if max_rpm is None or sample.rpm > max_rpm:
+                        max_rpm = sample.rpm
+
+                if sample.speed_mph is not None:
+                    total_speed_mph += sample.speed_mph
+
+                    if max_speed_mph is None or sample.speed_mph > max_speed_mph:
+                        max_speed_mph = sample.speed_mph
 
                 print(
-                    "Trip metadata saved to:",
-                    metadata_file,
+                    f"[{sample.sequence:04}] "
+                    f"{sample.timestamp.isoformat()} "
+                    f"RPM="
+                    f"{sample.rpm if sample.rpm is not None else 'N/A'} "
+                    f"SPEED_MPH="
+                    f"{sample.speed_mph if sample.speed_mph is not None else 'N/A'} "
+                    f"THROTTLE_PCT="
+                    f"{sample.throttle_pct if sample.throttle_pct is not None else 'N/A'} "
+                    f"LOAD_PCT="
+                    f"{sample.load_pct if sample.load_pct is not None else 'N/A'} "
+                    f"DURATION_MS="
+                    f"{sample.sample_duration_ms} "
+                    f"RATE_HZ="
+                    f"{sample.sample_rate_hz if sample.sample_rate_hz is not None else 'N/A'} "
+                    f"MISSING="
+                    f"{sample.missing_values} "
+                    f"FAILURES="
+                    f"{sample.query_failures}"
                 )
 
-            connection.close()
+                stop_event.wait(1)
 
-            print("OBD-II connection closed.")
+        finally:
+            if connection is not None:
+                if "start_time" in locals():
+                    end_time = datetime.now(timezone.utc)
+
+                    write_trip_metadata(
+                        metadata_file,
+                        start_time,
+                        end_time,
+                        sequence,
+                        max_rpm,
+                        max_speed_mph,
+                        total_rpm,
+                        total_speed_mph,
+                        total_sample_duration_ms,
+                        total_sample_rate_hz,
+                        sample_rate_count,
+                        total_missing_values,
+                        total_query_failures,
+                        vehicle,
+                        distance_miles,
+                        moving_time_seconds,
+                        stopped_time_seconds,
+                        alarm_event_count,
+                        alarm_trigger_count,
+                        alarm_clear_count,
+                    )
+
+                    print(
+                        "Trip metadata saved to:",
+                        metadata_file,
+                    )
+
+                connection.close()
+
+                print("OBD-II connection closed.")

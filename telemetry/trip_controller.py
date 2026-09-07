@@ -59,6 +59,12 @@ class TripController:
                 "vehicle_ready":
                     self._vehicle
                     is not None,
+                "active_alarms":
+                    runtime_state
+                    .get_active_alarms(),
+                "latest_alarm_event":
+                    runtime_state
+                    .latest_alarm_event,
             }
 
     def get_vehicle_status(self):
@@ -139,6 +145,7 @@ class TripController:
                 return False
 
             runtime_state.clear_latest_sample()
+            runtime_state.clear_alarm_state()
 
             vehicle = self._vehicle
 
@@ -286,6 +293,7 @@ class TripController:
 
                 runtime_state.clear_vehicle_info()
                 runtime_state.clear_latest_sample()
+                runtime_state.clear_alarm_state()
 
     def _run_trip(
         self,
@@ -299,6 +307,9 @@ class TripController:
                 on_sample=
                     runtime_state
                     .update_latest_sample,
+                on_alarm=
+                    runtime_state
+                    .update_alarm_event,
             )
 
         except Exception as error:
@@ -320,6 +331,7 @@ class TripController:
 
                 runtime_state.clear_vehicle_info()
                 runtime_state.clear_latest_sample()
+                runtime_state.clear_alarm_state()
 
         finally:
             with self._lock:
