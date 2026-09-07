@@ -274,7 +274,7 @@ python -m venv .venv
 ### 3. Install dependencies
 
 ```powershell
-pip install fastapi uvicorn python-OBD requests
+pip install -r requirements.txt
 ```
 
 ### 4. Connect the OBD-II adapter
