@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trip History</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: #f9fafb;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .title-group h1 {
+            margin: 0 0 6px 0;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+        }
+
+        .nav-link {
+            color: #f9fafb;
+            text-decoration: none;
+            background: #1f2937;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            background: #374151;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .panel {
+            background: #1f2937;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .trip-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .trip-item {
+            width: 100%;
+            text-align: left;
+            background: #111827;
+            color: #f9fafb;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            padding: 14px;
+            cursor: pointer;
+        }
+
+        .trip-item:hover {
+            border-color: #6b7280;
+        }
+
+        .trip-item.active {
+            border-color: #f9fafb;
+        }
+
+        .trip-vehicle {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .trip-time,
+        .trip-details {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .trip-details {
+            margin-top: 5px;
+        }
+
+        .placeholder {
+            color: #9ca3af;
+            padding: 30px 0;
+        }
+
+        .detail-header {
+            margin-bottom: 20px;
+        }
+
+        .detail-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .detail-subtitle {
+            color: #9ca3af;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: #111827;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .summary-label {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .chart-card {
+            background: #111827;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+
+        .chart-wrapper {
+            height: 260px;
+            position: relative;
+        }
+
+        .health {
+            margin-top: 24px;
+        }
+
+        .health-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid #374151;
+        }
+
+        .health-row:last-child {
+            border-bottom: none;
+        }
+
+        .health-label {
+            color: #d1d5db;
+        }
+
+        @media (max-width: 1000px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 18px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .summary-grid,
+            .charts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="topbar">
+            <div class="title-group">
+                <h1>Trip History</h1>
+
+                <div class="subtitle">
+                    Recorded vehicle telemetry sessions
+                </div>
+            </div>
+
+            <a class="nav-link" href="/dashboard">
+                Live Telemetry
+            </a>
+        </div>
+
+        <div class="layout">
+
+            <div class="panel">
+                <div class="panel-title">
+                    Recorded Trips
+                </div>
+
+                <div id="trip-list" class="trip-list">
+                    <div class="placeholder">
+                        Loading trips...
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div id="trip-detail">
+                    <div class="placeholder">
+                        Select a trip to view details.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let rpmChart = null;
+        let speedChart = null;
+        let throttleChart = null;
+        let loadChart = null;
+
+
+        function formatVehicle(vehicle) {
+            if (
+                !vehicle ||
+                !vehicle.year ||
+                !vehicle.make ||
+                !vehicle.model
+            ) {
+                return "Unknown Vehicle";
+            }
+
+            const make = vehicle.make
+                .toLowerCase()
+                .replace(
+                    /\b\w/g,
+                    character => character.toUpperCase()
+                );
+
+            return `${vehicle.year} ${make} ${vehicle.model}`;
+        }
+
+
+        function formatDateTime(timestamp) {
+            if (!timestamp) {
+                return "Unknown time";
+            }
+
+            const date = new Date(timestamp);
+
+            return date.toLocaleString();
+        }
+
+
+        function formatDuration(seconds) {
+            if (
+                seconds === null ||
+                seconds === undefined
+            ) {
+                return "N/A";
+            }
+
+            if (seconds < 60) {
+                return `${seconds.toFixed(1)} sec`;
+            }
+
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.round(
+                seconds % 60
+            );
+
+            return `${minutes} min ${remainingSeconds} sec`;
+        }
+
+
+        function destroyCharts() {
+            const charts = [
+                rpmChart,
+                speedChart,
+                throttleChart,
+                loadChart
+            ];
+
+            for (const chart of charts) {
+                if (chart) {
+                    chart.destroy();
+                }
+            }
+
+            rpmChart = null;
+            speedChart = null;
+            throttleChart = null;
+            loadChart = null;
+        }
+
+
+        function createHistoryChart(
+            canvasId,
+            label,
+            yAxisTitle,
+            samples,
+            valueKey
+        ) {
+            const context =
+                document
+                    .getElementById(canvasId)
+                    .getContext("2d");
+
+            return new Chart(context, {
+                type: "line",
+
+                data: {
+                    labels: samples.map(
+                        sample => sample.sequence
+                    ),
+
+                    datasets: [
+                        {
+                            label: label,
+                            data: samples.map(
+                                sample => sample[valueKey]
+                            ),
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.2
+                        }
+                    ]
+                },
+
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: "#9ca3af",
+                                maxTicksLimit: 8
+                            },
+
+                            grid: {
+                                color: "#374151"
+                            },
+
+                            title: {
+                                display: true,
+                                text: "Sequence",
+                                color: "#9ca3af"
+                            }
+                        },
+
+                        y: {
+                            beginAtZero: true,
+
+                            ticks: {
+                                color: "#9ca3af"
+                            },
+
+                            grid: {
+                                color: "#374151"
+                            },
+
+                            title: {
+                                display: true,
+                                text: yAxisTitle,
+                                color: "#9ca3af"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        async function loadTrips() {
+            const tripList =
+                document.getElementById("trip-list");
+
+            try {
+                const response =
+                    await fetch("/api/trips");
+
+                const trips =
+                    await response.json();
+
+                if (!trips.length) {
+                    tripList.innerHTML = `
+                        <div class="placeholder">
+                            No completed trips found.
+                        </div>
+                    `;
+
+                    return;
+                }
+
+                tripList.innerHTML = "";
+
+                for (const trip of trips) {
+                    const button =
+                        document.createElement("button");
+
+                    button.className = "trip-item";
+
+                    button.innerHTML = `
+                        <div class="trip-vehicle">
+                            ${formatVehicle(trip.vehicle)}
+                        </div>
+
+                        <div class="trip-time">
+                            ${formatDateTime(trip.start_time)}
+                        </div>
+
+                        <div class="trip-details">
+                            ${formatDuration(trip.duration_seconds)}
+                            · ${trip.distance_miles ?? "N/A"} mi
+                            · ${trip.sample_count ?? 0} samples
+                        </div>
+                    `;
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+                            document
+                                .querySelectorAll(".trip-item")
+                                .forEach(
+                                    item =>
+                                        item.classList.remove("active")
+                                );
+
+                            button.classList.add("active");
+
+                            loadTrip(trip.trip_id);
+                        }
+                    );
+
+                    tripList.appendChild(button);
+                }
+
+            } catch (error) {
+                tripList.innerHTML = `
+                    <div class="placeholder">
+                        Unable to load trip history.
+                    </div>
+                `;
+            }
+        }
+
+
+        async function loadTrip(tripId) {
+            const detail =
+                document.getElementById("trip-detail");
+
+            detail.innerHTML = `
+                <div class="placeholder">
+                    Loading trip...
+                </div>
+            `;
+
+            try {
+                const response =
+                    await fetch(
+                        `/api/trips/${tripId}`
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Trip could not be loaded."
+                    );
+                }
+
+                const trip =
+                    await response.json();
+
+                renderTrip(
+                    trip.trip_id,
+                    trip.metadata,
+                    trip.samples
+                );
+
+            } catch (error) {
+                detail.innerHTML = `
+                    <div class="placeholder">
+                        Unable to load this trip.
+                    </div>
+                `;
+            }
+        }
+
+
+        function renderTrip(
+            tripId,
+            metadata,
+            samples
+        ) {
+            destroyCharts();
+
+            const detail =
+                document.getElementById("trip-detail");
+
+            detail.innerHTML = `
+                <div class="detail-header">
+
+                    <div class="detail-title">
+                        ${formatVehicle(metadata.vehicle)}
+                    </div>
+
+                    <div class="detail-subtitle">
+                        ${formatDateTime(metadata.start_time)}
+                    </div>
+
+                </div>
+
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Duration
+                        </div>
+
+                        <div class="summary-value">
+                            ${formatDuration(
+                                metadata.duration_seconds
+                            )}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Distance
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.distance_miles ?? "N/A"} mi
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Max Speed
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.max_speed_mph ?? "N/A"} mph
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Max RPM
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.max_rpm ?? "N/A"}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Samples
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.sample_count ?? 0}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Average Speed
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.average_speed_mph ?? "N/A"} mph
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Average RPM
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.average_rpm ?? "N/A"}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Sample Rate
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.average_sample_rate_hz ?? "N/A"} Hz
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Sample Duration
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.average_sample_duration_ms ?? "N/A"} ms
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Moving Time
+                        </div>
+
+                        <div class="summary-value">
+                            ${formatDuration(
+                                metadata.moving_time_seconds
+                            )}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Stopped Time
+                        </div>
+
+                        <div class="summary-value">
+                            ${formatDuration(
+                                metadata.stopped_time_seconds
+                            )}
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-label">
+                            Avg Moving Speed
+                        </div>
+
+                        <div class="summary-value">
+                            ${metadata.average_moving_speed_mph ?? "N/A"} mph
+                        </div>
+                    </div>
+
+                    </div>
+
+                </div>
+
+                <div class="charts">
+
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            RPM History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="rpm-history-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            Speed History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="speed-history-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            Throttle History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="throttle-history-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            Engine Load History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="load-history-chart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="health">
+
+                    <div class="panel-title">
+                        Acquisition Health
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">
+                            Average Sample Rate
+                        </span>
+
+                        <span>
+                            ${metadata.average_sample_rate_hz ?? "N/A"} Hz
+                        </span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">
+                            Average Sample Duration
+                        </span>
+
+                        <span>
+                            ${metadata.average_sample_duration_ms ?? "N/A"} ms
+                        </span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">
+                            Missing Values
+                        </span>
+
+                        <span>
+                            ${metadata.total_missing_values ?? 0}
+                        </span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">
+                            Query Failures
+                        </span>
+
+                        <span>
+                            ${metadata.total_query_failures ?? 0}
+                        </span>
+                    </div>
+
+                    <div class="health-row">
+                        <span class="health-label">
+                            Trip ID
+                        </span>
+
+                        <span>
+                            ${tripId}
+                        </span>
+                    </div>
+
+                </div>
+            `;
+
+            rpmChart = createHistoryChart(
+                "rpm-history-chart",
+                "RPM",
+                "RPM",
+                samples,
+                "rpm"
+            );
+
+            speedChart = createHistoryChart(
+                "speed-history-chart",
+                "Speed",
+                "mph",
+                samples,
+                "speed_mph"
+            );
+
+            throttleChart = createHistoryChart(
+                "throttle-history-chart",
+                "Throttle",
+                "%",
+                samples,
+                "throttle_pct"
+            );
+
+            loadChart = createHistoryChart(
+                "load-history-chart",
+                "Engine Load",
+                "%",
+                samples,
+                "load_pct"
+            );
+        }
+
+
+        loadTrips();
+    </script>
+
+</body>
+</html>
