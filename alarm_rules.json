@@ -4,7 +4,7 @@
       "name": "High RPM",
       "field": "rpm",
       "operator": ">",
-      "threshold": 1000,
+      "threshold": 4000,
       "duration_seconds": 2,
       "severity": "warning"
     },
