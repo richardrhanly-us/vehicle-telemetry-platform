@@ -258,7 +258,7 @@ The code can be extended later to support configurable or automatic serial-port 
 ### 1. Clone the repository
 
 ```bash
-git clone git@github.com:richardrhanly-us/vehicle-telemetry-platform.git
+git clone https://github.com/richardrhanly-us/vehicle-telemetry-platform.git
 cd vehicle-telemetry-platform
 ```
 
@@ -267,7 +267,7 @@ cd vehicle-telemetry-platform
 Windows PowerShell:
 
 ```powershell
-python -m venv .venv
+py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
@@ -277,13 +277,31 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 4. Connect the OBD-II adapter
+### 4. Configure the OBD-II port
+
+Copy the example environment file:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Then open `.env` and set the serial port used by your OBD-II adapter:
+
+```env
+OBD_PORT=COM3
+```
+
+Each computer can use its own local `.env` file, so the adapter can be on a different COM port without changing the source code.
+
+The `.env` file is excluded from Git.
+
+### 5. Connect the OBD-II adapter
 
 Connect the OBD-II adapter to the vehicle and computer.
 
-The current collector expects the serial connection on `COM3`.
+Make sure the `OBD_PORT` value in `.env` matches the COM port assigned by Windows.
 
-### 5. Start the application
+### 6. Start the application
 
 ```powershell
 python main.py
@@ -300,6 +318,19 @@ Trip history is available at:
 ```text
 http://127.0.0.1:8000/trips
 ```
+
+## Hardware
+
+Development has been performed with an OBDLink EX USB OBD-II adapter.
+
+The serial port is configured through the local `.env` file:
+
+```env
+OBD_PORT=COM3
+```
+
+This allows different development machines to use different COM ports without changing the code.
+
 
 ## API
 
