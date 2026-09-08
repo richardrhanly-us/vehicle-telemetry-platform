@@ -335,6 +335,122 @@
         }
 
 
+
+        :root {
+            --powertrain: #38bdf8;
+            --thermal: #fb923c;
+            --airflow: #34d399;
+            --electrical: #a78bfa;
+        }
+
+        .metric-section.powertrain .metric-section-title {
+            color: var(--powertrain);
+        }
+
+        .metric-section.thermal .metric-section-title {
+            color: var(--thermal);
+        }
+
+        .metric-section.airflow .metric-section-title {
+            color: var(--airflow);
+        }
+
+        .metric-section.electrical .metric-section-title {
+            color: var(--electrical);
+        }
+
+        .metric-section.powertrain .metric-section-title::after {
+            background: rgba(56, 189, 248, 0.42);
+        }
+
+        .metric-section.thermal .metric-section-title::after {
+            background: rgba(251, 146, 60, 0.42);
+        }
+
+        .metric-section.airflow .metric-section-title::after {
+            background: rgba(52, 211, 153, 0.42);
+        }
+
+        .metric-section.electrical .metric-section-title::after {
+            background: rgba(167, 139, 250, 0.42);
+        }
+
+        .metric-section.powertrain .card {
+            border-left: 3px solid var(--powertrain);
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(56, 189, 248, 0.08),
+                    rgba(31, 41, 55, 0) 34%
+                ),
+                #1f2937;
+        }
+
+        .metric-section.thermal .card {
+            border-left: 3px solid var(--thermal);
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(251, 146, 60, 0.08),
+                    rgba(31, 41, 55, 0) 34%
+                ),
+                #1f2937;
+        }
+
+        .metric-section.airflow .card {
+            border-left: 3px solid var(--airflow);
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(52, 211, 153, 0.08),
+                    rgba(31, 41, 55, 0) 34%
+                ),
+                #1f2937;
+        }
+
+        .metric-section.electrical .card {
+            border-left: 3px solid var(--electrical);
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(167, 139, 250, 0.08),
+                    rgba(31, 41, 55, 0) 34%
+                ),
+                #1f2937;
+        }
+
+        .chart-card.powertrain {
+            border-top: 3px solid var(--powertrain);
+        }
+
+        .chart-card.thermal {
+            border-top: 3px solid var(--thermal);
+        }
+
+        .chart-card.airflow {
+            border-top: 3px solid var(--airflow);
+        }
+
+        .chart-card.electrical {
+            border-top: 3px solid var(--electrical);
+        }
+
+        .chart-card.powertrain .chart-title {
+            color: var(--powertrain);
+        }
+
+        .chart-card.thermal .chart-title {
+            color: var(--thermal);
+        }
+
+        .chart-card.airflow .chart-title {
+            color: var(--airflow);
+        }
+
+        .chart-card.electrical .chart-title {
+            color: var(--electrical);
+        }
+
         .metric-section {
             margin-top: 34px;
         }
@@ -435,6 +551,15 @@
 
         }
 
+
+        .chart-axis-unit {
+            margin: 2px 0 3px 2px;
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
         .chart-wrapper {
 
             position: relative;
@@ -499,6 +624,92 @@
 
             word-break: break-all;
 
+        }
+
+        .state-dot.playback {
+            background: #a78bfa;
+        }
+
+        .state-dot.paused {
+            background: #fbbf24;
+        }
+
+
+        .playback-banner {
+            display: none;
+            margin: 0 0 24px 0;
+            padding: 16px 18px;
+            background: #243554;
+            border: 1px solid #60a5fa;
+            border-radius: 10px;
+            box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.18);
+        }
+
+        .playback-banner.active {
+            display: block;
+        }
+
+        .playback-source-vehicle {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .playback-source-time {
+            margin-top: 4px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+
+        .playback-timeline {
+            margin-top: 14px;
+        }
+
+        .playback-timeline-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 18px;
+            margin-bottom: 8px;
+        }
+
+        .playback-time {
+            font-size: 18px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .playback-remaining {
+            color: #bfdbfe;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .playback-track {
+            position: relative;
+            height: 10px;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(147, 197, 253, 0.28);
+            border-radius: 999px;
+        }
+
+        .playback-track-fill {
+            width: 0%;
+            height: 100%;
+            background: #60a5fa;
+            border-radius: inherit;
+            transition: width 0.25s linear;
+        }
+
+        .playback-position-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            color: #93a4bd;
+            font-size: 11px;
+            font-variant-numeric: tabular-nums;
         }
 
         @media (max-width: 800px) {
@@ -661,6 +872,52 @@
 
         </div>
 
+        <div id="playback-banner" class="playback-banner">
+            <div
+                id="playback-source-vehicle"
+                class="playback-source-vehicle"
+            >
+                Recorded vehicle
+            </div>
+
+            <div
+                id="playback-source-time"
+                class="playback-source-time"
+            >
+                Unknown recording time
+            </div>
+
+            <div class="playback-timeline">
+                <div class="playback-timeline-row">
+                    <div
+                        id="playback-time-display"
+                        class="playback-time"
+                    >
+                        00:00 / 00:00
+                    </div>
+
+                    <div
+                        id="playback-remaining"
+                        class="playback-remaining"
+                    >
+                        0 sec remaining
+                    </div>
+                </div>
+
+                <div class="playback-track">
+                    <div
+                        id="playback-track-fill"
+                        class="playback-track-fill"
+                    ></div>
+                </div>
+
+                <div class="playback-position-labels">
+                    <span>Start</span>
+                    <span id="playback-percent">0%</span>
+                    <span>End</span>
+                </div>
+            </div>
+        </div>
 
 
         <div id="live-alarm-panel" class="live-alarm-panel">
@@ -687,7 +944,7 @@
 
         <div id="alarm-clear-message" class="alarm-clear-message"></div>
 
-        <div class="metric-section">
+        <div class="metric-section powertrain">
             <div class="metric-section-title">
                 Powertrain
             </div>
@@ -720,7 +977,7 @@
             </div>
         </div>
 
-        <div class="metric-section">
+        <div class="metric-section thermal">
             <div class="metric-section-title">
                 Thermal
             </div>
@@ -781,7 +1038,7 @@
             </div>
         </div>
 
-        <div class="metric-section">
+        <div class="metric-section airflow">
             <div class="metric-section-title">
                 Airflow & Pressure
             </div>
@@ -804,7 +1061,7 @@
             </div>
         </div>
 
-        <div class="metric-section">
+        <div class="metric-section electrical">
             <div class="metric-section-title">
                 Electrical
             </div>
@@ -822,9 +1079,8 @@
 
         <div class="charts">
 
-            <div class="chart-card">
-
-                <div class="chart-title">RPM History</div>
+            <div class="chart-card powertrain"><div class="chart-title">RPM History</div>
+                        <div class="chart-axis-unit">RPM</div>
 
                 <div class="chart-wrapper">
 
@@ -834,9 +1090,8 @@
 
             </div>
 
-            <div class="chart-card">
-
-                <div class="chart-title">Speed History</div>
+            <div class="chart-card powertrain"><div class="chart-title">Speed History</div>
+                        <div class="chart-axis-unit">mph</div>
 
                 <div class="chart-wrapper">
 
@@ -846,9 +1101,8 @@
 
             </div>
 
-            <div class="chart-card">
-
-                <div class="chart-title">Throttle History</div>
+            <div class="chart-card powertrain"><div class="chart-title">Throttle History</div>
+                        <div class="chart-axis-unit">%</div>
 
                 <div class="chart-wrapper">
 
@@ -858,9 +1112,8 @@
 
             </div>
 
-            <div class="chart-card">
-
-                <div class="chart-title">Engine Load History</div>
+            <div class="chart-card powertrain"><div class="chart-title">Engine Load History</div>
+                        <div class="chart-axis-unit">%</div>
 
                 <div class="chart-wrapper">
 
@@ -870,9 +1123,8 @@
 
             </div>
 
-            <div class="chart-card">
-
-                <div class="chart-title">Coolant Temperature History</div>
+            <div class="chart-card thermal"><div class="chart-title">Coolant Temperature History</div>
+                        <div class="chart-axis-unit">°F</div>
 
                 <div class="chart-wrapper">
 
@@ -882,9 +1134,8 @@
 
             </div>
 
-            <div class="chart-card">
-
-                <div class="chart-title">Oil Temperature History</div>
+            <div class="chart-card thermal"><div class="chart-title">Oil Temperature History</div>
+                        <div class="chart-axis-unit">°F</div>
 
                 <div class="chart-wrapper">
 
@@ -894,9 +1145,8 @@
 
             </div>
 
-            <div class="chart-card">
-
-                <div class="chart-title">Mass Air Flow History</div>
+            <div class="chart-card airflow"><div class="chart-title">Mass Air Flow History</div>
+                        <div class="chart-axis-unit">g/s</div>
 
                 <div class="chart-wrapper">
 
@@ -906,9 +1156,8 @@
 
             </div>
 
-            <div class="chart-card">
-
-                <div class="chart-title">Manifold Pressure History</div>
+            <div class="chart-card airflow"><div class="chart-title">Manifold Pressure History</div>
+                        <div class="chart-axis-unit">kPa</div>
 
                 <div class="chart-wrapper">
 
@@ -1017,6 +1266,9 @@
             document.getElementById("error-message");
 
         let currentTripState = "idle";
+        let currentPlaybackActive = false;
+        let currentPlaybackState = "idle";
+
 
         let currentVehicleState = "waiting";
 
@@ -1176,7 +1428,9 @@
 
             label,
 
-            yAxisTitle
+            yAxisTitle,
+
+            lineColor
 
         ) {
 
@@ -1205,6 +1459,10 @@
                             data: [],
 
                             borderWidth: 2,
+
+                            borderColor: lineColor,
+
+                            backgroundColor: lineColor,
 
                             pointRadius: 0,
 
@@ -1281,13 +1539,7 @@
                             },
 
                             title: {
-
-                                display: true,
-
-                                text: yAxisTitle,
-
-                                color: "#9ca3af"
-
+                                display: false
                             }
 
                         }
@@ -1354,7 +1606,9 @@
 
             "RPM",
 
-            "RPM"
+            "RPM",
+
+            "#38bdf8"
 
         );
 
@@ -1364,7 +1618,9 @@
 
             "Speed",
 
-            "mph"
+            "mph",
+
+            "#38bdf8"
 
         );
 
@@ -1374,7 +1630,9 @@
 
             "Throttle",
 
-            "%"
+            "%",
+
+            "#38bdf8"
 
         );
 
@@ -1384,7 +1642,9 @@
 
             "Engine Load",
 
-            "%"
+            "%",
+
+            "#38bdf8"
 
         );
 
@@ -1394,7 +1654,9 @@
 
             "Coolant Temperature",
 
-            "°F"
+            "°F",
+
+            "#fb923c"
 
         );
 
@@ -1404,7 +1666,9 @@
 
             "Oil Temperature",
 
-            "°F"
+            "°F",
+
+            "#fb923c"
 
         );
 
@@ -1414,7 +1678,9 @@
 
             "Mass Air Flow",
 
-            "g/s"
+            "g/s",
+
+            "#34d399"
 
         );
 
@@ -1424,7 +1690,9 @@
 
             "Manifold Pressure",
 
-            "kPa"
+            "kPa",
+
+            "#34d399"
 
         );
 
@@ -1650,6 +1918,41 @@
 
 
 
+
+        function formatPlaybackDateTime(timestamp) {
+            if (!timestamp) {
+                return "Unknown recording time";
+            }
+
+            const date = new Date(timestamp);
+
+            return date.toLocaleString();
+        }
+
+
+        function formatPlaybackDuration(seconds) {
+            const safeSeconds = Math.max(
+                0,
+                Number(seconds) || 0
+            );
+
+            const roundedSeconds =
+                Math.floor(safeSeconds);
+
+            const minutes =
+                Math.floor(roundedSeconds / 60);
+
+            const remainingSeconds =
+                roundedSeconds % 60;
+
+            return (
+                String(minutes).padStart(2, "0")
+                + ":"
+                + String(remainingSeconds).padStart(2, "0")
+            );
+        }
+
+
         function renderStatus(
 
             tripStatus,
@@ -1670,6 +1973,156 @@
 
                 vehicleStatus.ready;
 
+            const playbackStatus =
+                tripStatus.playback || {};
+
+            currentPlaybackActive =
+                playbackStatus.active || false;
+
+            currentPlaybackState =
+                playbackStatus.state || "idle";
+
+
+            const playbackBanner =
+                document.getElementById(
+                    "playback-banner"
+                );
+
+            const playbackSourceVehicle =
+                document.getElementById(
+                    "playback-source-vehicle"
+                );
+
+            const playbackSourceTime =
+                document.getElementById(
+                    "playback-source-time"
+                );
+
+            const playbackTimeDisplay =
+                document.getElementById(
+                    "playback-time-display"
+                );
+
+            const playbackRemaining =
+                document.getElementById(
+                    "playback-remaining"
+                );
+
+            const playbackTrackFill =
+                document.getElementById(
+                    "playback-track-fill"
+                );
+
+            const playbackPercent =
+                document.getElementById(
+                    "playback-percent"
+                );
+
+            if (playbackStatus.active) {
+                playbackBanner.classList.add(
+                    "active"
+                );
+
+                const playbackVehicle =
+                    vehicleStatus.vehicle;
+
+                if (
+                    playbackVehicle
+                    && playbackVehicle.year
+                    && playbackVehicle.make
+                    && playbackVehicle.model
+                ) {
+                    const make =
+                        formatMake(
+                            playbackVehicle.make
+                        );
+
+                    playbackSourceVehicle.textContent =
+                        `${playbackVehicle.year} `
+                        + `${make} `
+                        + `${playbackVehicle.model}`;
+
+                } else {
+                    playbackSourceVehicle.textContent =
+                        "Recorded vehicle";
+                }
+
+                playbackSourceTime.textContent =
+                    formatPlaybackDateTime(
+                        playbackStatus.start_time
+                    );
+
+                const elapsedSeconds =
+                    Number(
+                        playbackStatus.elapsed_seconds
+                    ) || 0;
+
+                const durationSeconds =
+                    Number(
+                        playbackStatus.duration_seconds
+                    ) || 0;
+
+                const remainingSeconds =
+                    Math.max(
+                        durationSeconds - elapsedSeconds,
+                        0
+                    );
+
+                const progressPercent =
+                    durationSeconds > 0
+                        ? Math.min(
+                            100,
+                            (
+                                elapsedSeconds
+                                / durationSeconds
+                            ) * 100
+                        )
+                        : 0;
+
+                playbackTimeDisplay.textContent =
+                    `${formatPlaybackDuration(
+                        elapsedSeconds
+                    )} / ${formatPlaybackDuration(
+                        durationSeconds
+                    )}`;
+
+                playbackRemaining.textContent =
+                    `${Math.ceil(
+                        remainingSeconds
+                    )} sec remaining`;
+
+                playbackTrackFill.style.width =
+                    `${progressPercent}%`;
+
+                playbackPercent.textContent =
+                    `${Math.round(
+                        progressPercent
+                    )}%`;
+
+            } else {
+                playbackBanner.classList.remove(
+                    "active"
+                );
+
+                playbackSourceVehicle.textContent =
+                    "Recorded vehicle";
+
+                playbackSourceTime.textContent =
+                    "Unknown recording time";
+
+                playbackTimeDisplay.textContent =
+                    "00:00 / 00:00";
+
+                playbackRemaining.textContent =
+                    "0 sec remaining";
+
+                playbackTrackFill.style.width =
+                    "0%";
+
+                playbackPercent.textContent =
+                    "0%";
+            }
+
             renderLiveAlarms(
 
                 tripStatus.active_alarms || [],
@@ -1689,6 +2142,60 @@
                 "state-dot";
 
             if (
+                playbackStatus.state === "playing"
+            ) {
+                tripState.textContent =
+                    "Playback";
+
+                stateDot.classList.add(
+                    "playback"
+                );
+
+                scanButton.disabled = true;
+                startButton.disabled = true;
+                stopButton.disabled = true;
+
+                const currentIndex =
+                    playbackStatus.current_index ?? 0;
+
+                const sampleCount =
+                    playbackStatus.sample_count ?? 0;
+
+                document
+                    .getElementById("connection")
+                    .textContent =
+                        `Recorded trip playback · `
+                        + `${currentIndex}/${sampleCount} samples · `
+                        + `${playbackStatus.speed ?? 1}x`;
+
+            } else if (
+                playbackStatus.state === "paused"
+            ) {
+                tripState.textContent =
+                    "Playback Paused";
+
+                stateDot.classList.add(
+                    "paused"
+                );
+
+                scanButton.disabled = true;
+                startButton.disabled = true;
+                stopButton.disabled = true;
+
+                const currentIndex =
+                    playbackStatus.current_index ?? 0;
+
+                const sampleCount =
+                    playbackStatus.sample_count ?? 0;
+
+                document
+                    .getElementById("connection")
+                    .textContent =
+                        `Recorded trip paused · `
+                        + `${currentIndex}/${sampleCount} samples · `
+                        + `${playbackStatus.speed ?? 1}x`;
+
+            } else if (
 
                 tripStatus.state === "recording"
 
@@ -1957,6 +2464,8 @@
             if (
 
                 currentTripState !== "idle"
+
+                || currentPlaybackActive
 
                 || vehicleReady
 

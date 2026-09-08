@@ -4,7 +4,7 @@
       "name": "High RPM",
       "field": "rpm",
       "operator": ">",
-      "threshold": 4000,
+      "threshold": 1000,
       "duration_seconds": 2,
       "severity": "warning"
     },
@@ -12,7 +12,7 @@
       "name": "High Engine Load",
       "field": "load_pct",
       "operator": ">",
-      "threshold": 90,
+      "threshold": 10,
       "duration_seconds": 3,
       "severity": "warning"
     },
@@ -20,7 +20,7 @@
       "name": "Elevated Coolant Temperature",
       "field": "coolant_temp_f",
       "operator": ">",
-      "threshold": 215,
+      "threshold": 115,
       "duration_seconds": 10,
       "severity": "warning"
     },
@@ -28,7 +28,7 @@
       "name": "Critical Coolant Temperature",
       "field": "coolant_temp_f",
       "operator": ">",
-      "threshold": 230,
+      "threshold": 130,
       "duration_seconds": 3,
       "severity": "critical"
     },
@@ -36,7 +36,7 @@
       "name": "High Oil Temperature",
       "field": "oil_temp_f",
       "operator": ">",
-      "threshold": 250,
+      "threshold": 150,
       "duration_seconds": 5,
       "severity": "warning"
     }

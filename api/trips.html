@@ -96,7 +96,9 @@
         }
 
         .trip-item.active {
-            border-color: #f9fafb;
+            background: #243554;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.18);
         }
 
         .trip-vehicle {
@@ -157,6 +159,46 @@
             font-weight: 700;
         }
 
+
+        :root {
+            --powertrain: #38bdf8;
+            --thermal: #fb923c;
+            --airflow: #34d399;
+            --electrical: #a78bfa;
+        }
+
+        .chart-card.powertrain {
+            border-top: 3px solid var(--powertrain);
+        }
+
+        .chart-card.thermal {
+            border-top: 3px solid var(--thermal);
+        }
+
+        .chart-card.airflow {
+            border-top: 3px solid var(--airflow);
+        }
+
+        .chart-card.electrical {
+            border-top: 3px solid var(--electrical);
+        }
+
+        .chart-card.powertrain .chart-title {
+            color: var(--powertrain);
+        }
+
+        .chart-card.thermal .chart-title {
+            color: var(--thermal);
+        }
+
+        .chart-card.airflow .chart-title {
+            color: var(--airflow);
+        }
+
+        .chart-card.electrical .chart-title {
+            color: var(--electrical);
+        }
+
         .charts {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -173,6 +215,15 @@
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 14px;
+        }
+
+
+        .chart-axis-unit {
+            margin: 2px 0 3px 2px;
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1;
         }
 
         .chart-wrapper {
@@ -295,6 +346,101 @@
             color: #34d399;
         }
 
+
+        .playback-panel {
+            margin-bottom: 24px;
+            padding: 18px;
+            background: #111827;
+            border: 1px solid #374151;
+            border-radius: 10px;
+        }
+
+        .playback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .playback-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .playback-state {
+            color: #93c5fd;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .playback-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .playback-button,
+        .playback-speed,
+        .playback-link {
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            padding: 9px 12px;
+            background: #1f2937;
+            color: #f9fafb;
+            font: inherit;
+        }
+
+        .playback-button,
+        .playback-link {
+            cursor: pointer;
+        }
+
+        .playback-button:hover:not(:disabled),
+        .playback-link:hover {
+            background: #374151;
+        }
+
+        .playback-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .playback-link {
+            margin-left: auto;
+            text-decoration: none;
+        }
+
+        .playback-progress {
+            height: 8px;
+            margin-top: 14px;
+            overflow: hidden;
+            background: #1f2937;
+            border-radius: 999px;
+        }
+
+        .playback-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #60a5fa;
+            transition: width 0.2s ease;
+        }
+
+        .playback-progress-text {
+            margin-top: 8px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .playback-error {
+            margin-top: 10px;
+            color: #fca5a5;
+            font-size: 13px;
+        }
+
         @media (max-width: 1000px) {
             .layout {
                 grid-template-columns: 1fr;
@@ -378,6 +524,8 @@
         let oilTempChart = null;
         let mafChart = null;
         let mapChart = null;
+        let selectedTripId = null;
+        let playbackPollTimer = null;
 
 
         function formatVehicle(vehicle) {
@@ -467,7 +615,8 @@
             label,
             yAxisTitle,
             samples,
-            valueKey
+            valueKey,
+            lineColor
         ) {
             const context =
                 document
@@ -489,6 +638,8 @@
                                 sample => sample[valueKey]
                             ),
                             borderWidth: 2,
+                            borderColor: lineColor,
+                            backgroundColor: lineColor,
                             pointRadius: 0,
                             tension: 0.2
                         }
@@ -536,14 +687,317 @@
                             },
 
                             title: {
-                                display: true,
-                                text: yAxisTitle,
-                                color: "#9ca3af"
+                                display: false
                             }
                         }
                     }
                 }
             });
+        }
+
+
+
+        function getPlaybackElements() {
+            return {
+                state: document.getElementById("playback-state"),
+                play: document.getElementById("playback-play"),
+                pause: document.getElementById("playback-pause"),
+                resume: document.getElementById("playback-resume"),
+                stop: document.getElementById("playback-stop"),
+                speed: document.getElementById("playback-speed"),
+                progressFill: document.getElementById(
+                    "playback-progress-fill"
+                ),
+                progressText: document.getElementById(
+                    "playback-progress-text"
+                ),
+                error: document.getElementById("playback-error")
+            };
+        }
+
+
+        function renderPlaybackStatus(status) {
+            const elements = getPlaybackElements();
+
+            if (!elements.state) {
+                return;
+            }
+
+            const currentIndex = status.current_index ?? 0;
+            const sampleCount = status.sample_count ?? 0;
+
+            let progress = 0;
+
+            if (sampleCount > 0) {
+                progress = Math.min(
+                    100,
+                    (currentIndex / sampleCount) * 100
+                );
+            }
+
+            elements.progressFill.style.width =
+                `${progress}%`;
+
+            elements.progressText.textContent =
+                `${currentIndex} / ${sampleCount} samples`;
+
+            elements.error.textContent =
+                status.error || "";
+
+            const isSelectedTripActive =
+                status.active
+                && status.trip_id === selectedTripId;
+
+            const anotherTripActive =
+                status.active
+                && status.trip_id !== selectedTripId;
+
+            if (status.state === "playing" && isSelectedTripActive) {
+                elements.state.textContent =
+                    `Playing · ${status.speed}x`;
+
+                elements.play.disabled = true;
+                elements.pause.disabled = false;
+                elements.resume.disabled = true;
+                elements.stop.disabled = false;
+                elements.speed.disabled = false;
+
+            } else if (
+                status.state === "paused"
+                && isSelectedTripActive
+            ) {
+                elements.state.textContent =
+                    `Paused · ${status.speed}x`;
+
+                elements.play.disabled = true;
+                elements.pause.disabled = true;
+                elements.resume.disabled = false;
+                elements.stop.disabled = false;
+                elements.speed.disabled = false;
+
+            } else if (anotherTripActive) {
+                elements.state.textContent =
+                    "Another trip is playing";
+
+                elements.play.disabled = true;
+                elements.pause.disabled = true;
+                elements.resume.disabled = true;
+                elements.stop.disabled = true;
+                elements.speed.disabled = true;
+
+            } else {
+                elements.state.textContent =
+                    currentIndex > 0 && currentIndex === sampleCount
+                        ? "Complete"
+                        : "Idle";
+
+                elements.play.disabled = false;
+                elements.pause.disabled = true;
+                elements.resume.disabled = true;
+                elements.stop.disabled = true;
+                elements.speed.disabled = false;
+            }
+        }
+
+
+        async function refreshPlaybackStatus() {
+            if (!document.getElementById("playback-state")) {
+                return;
+            }
+
+            try {
+                const response =
+                    await fetch("/api/playback/status");
+
+                const status =
+                    await response.json();
+
+                renderPlaybackStatus(status);
+
+            } catch (error) {
+                const elements = getPlaybackElements();
+
+                if (elements.error) {
+                    elements.error.textContent =
+                        "Unable to read playback status.";
+                }
+            }
+        }
+
+
+        async function sendPlaybackRequest(
+            url,
+            options = {}
+        ) {
+            const response =
+                await fetch(url, options);
+
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch (error) {
+                data = {};
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    data.detail
+                    || "Playback request failed."
+                );
+            }
+
+            renderPlaybackStatus(data);
+
+            return data;
+        }
+
+
+        async function startSelectedPlayback() {
+            if (!selectedTripId) {
+                return;
+            }
+
+            const elements = getPlaybackElements();
+            const speed = elements.speed.value;
+
+            elements.error.textContent = "";
+
+            try {
+                await sendPlaybackRequest(
+                    `/api/playback/start/${selectedTripId}?speed=${speed}`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+            } catch (error) {
+                elements.error.textContent =
+                    error.message;
+            }
+        }
+
+
+        async function pausePlayback() {
+            const elements = getPlaybackElements();
+
+            try {
+                await sendPlaybackRequest(
+                    "/api/playback/pause",
+                    {
+                        method: "POST"
+                    }
+                );
+
+            } catch (error) {
+                elements.error.textContent =
+                    error.message;
+            }
+        }
+
+
+        async function resumePlayback() {
+            const elements = getPlaybackElements();
+
+            try {
+                await sendPlaybackRequest(
+                    "/api/playback/resume",
+                    {
+                        method: "POST"
+                    }
+                );
+
+            } catch (error) {
+                elements.error.textContent =
+                    error.message;
+            }
+        }
+
+
+        async function stopPlayback() {
+            const elements = getPlaybackElements();
+
+            try {
+                await sendPlaybackRequest(
+                    "/api/playback/stop",
+                    {
+                        method: "POST"
+                    }
+                );
+
+            } catch (error) {
+                elements.error.textContent =
+                    error.message;
+            }
+        }
+
+
+        async function changePlaybackSpeed() {
+            const elements = getPlaybackElements();
+
+            try {
+                const statusResponse =
+                    await fetch("/api/playback/status");
+
+                const status =
+                    await statusResponse.json();
+
+                if (!status.active) {
+                    return;
+                }
+
+                await sendPlaybackRequest(
+                    `/api/playback/speed?speed=${elements.speed.value}`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+            } catch (error) {
+                elements.error.textContent =
+                    error.message;
+            }
+        }
+
+
+        function bindPlaybackControls(tripId) {
+            selectedTripId = tripId;
+
+            const elements = getPlaybackElements();
+
+            elements.play.addEventListener(
+                "click",
+                startSelectedPlayback
+            );
+
+            elements.pause.addEventListener(
+                "click",
+                pausePlayback
+            );
+
+            elements.resume.addEventListener(
+                "click",
+                resumePlayback
+            );
+
+            elements.stop.addEventListener(
+                "click",
+                stopPlayback
+            );
+
+            elements.speed.addEventListener(
+                "change",
+                changePlaybackSpeed
+            );
+
+            if (playbackPollTimer) {
+                clearInterval(playbackPollTimer);
+            }
+
+            playbackPollTimer = setInterval(
+                refreshPlaybackStatus,
+                500
+            );
         }
 
 
@@ -622,6 +1076,8 @@
 
 
         async function loadTrip(tripId) {
+            selectedTripId = tripId;
+
             const detail =
                 document.getElementById("trip-detail");
 
@@ -748,6 +1204,94 @@
                         ${formatDateTime(metadata.start_time)}
                     </div>
 
+                </div>
+
+                <div class="playback-panel">
+                    <div class="playback-header">
+                        <div class="playback-title">
+                            Recorded Trip Playback
+                        </div>
+                        <div id="playback-state" class="playback-state">
+                            Idle
+                        </div>
+                    </div>
+
+                    <div class="playback-controls">
+                        <button
+                            id="playback-play"
+                            class="playback-button"
+                            type="button"
+                        >
+                            ▶ Play
+                        </button>
+
+                        <button
+                            id="playback-pause"
+                            class="playback-button"
+                            type="button"
+                            disabled
+                        >
+                            ⏸ Pause
+                        </button>
+
+                        <button
+                            id="playback-resume"
+                            class="playback-button"
+                            type="button"
+                            disabled
+                        >
+                            ▶ Resume
+                        </button>
+
+                        <button
+                            id="playback-stop"
+                            class="playback-button"
+                            type="button"
+                            disabled
+                        >
+                            ■ Stop
+                        </button>
+
+                        <label for="playback-speed">
+                            Speed
+                        </label>
+
+                        <select
+                            id="playback-speed"
+                            class="playback-speed"
+                        >
+                            <option value="0.5">0.5x</option>
+                            <option value="1" selected>1x</option>
+                            <option value="2">2x</option>
+                            <option value="5">5x</option>
+                        </select>
+
+                        <a
+                            class="playback-link"
+                            href="/dashboard"
+                        >
+                            View Live Playback
+                        </a>
+                    </div>
+
+                    <div class="playback-progress">
+                        <div
+                            id="playback-progress-fill"
+                            class="playback-progress-fill"
+                        ></div>
+                    </div>
+
+                    <div
+                        id="playback-progress-text"
+                        class="playback-progress-text"
+                    >
+                        0 / ${metadata.sample_count ?? samples.length ?? 0} samples
+                    </div>
+
+                    <div
+                        id="playback-error"
+                        class="playback-error"
+                    ></div>
                 </div>
 
                 <div class="summary-grid">
@@ -884,80 +1428,80 @@
 
                 <div class="charts">
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card powertrain"><div class="chart-title">
                             RPM History
                         </div>
+                        <div class="chart-axis-unit">RPM</div>
 
                         <div class="chart-wrapper">
                             <canvas id="rpm-history-chart"></canvas>
                         </div>
                     </div>
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card powertrain"><div class="chart-title">
                             Speed History
                         </div>
+                        <div class="chart-axis-unit">mph</div>
 
                         <div class="chart-wrapper">
                             <canvas id="speed-history-chart"></canvas>
                         </div>
                     </div>
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card powertrain"><div class="chart-title">
                             Throttle History
                         </div>
+                        <div class="chart-axis-unit">%</div>
 
                         <div class="chart-wrapper">
                             <canvas id="throttle-history-chart"></canvas>
                         </div>
                     </div>
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card powertrain"><div class="chart-title">
                             Engine Load History
                         </div>
+                        <div class="chart-axis-unit">%</div>
 
                         <div class="chart-wrapper">
                             <canvas id="load-history-chart"></canvas>
                         </div>
                     </div>
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card thermal"><div class="chart-title">
                             Coolant Temperature History
                         </div>
+                        <div class="chart-axis-unit">°F</div>
 
                         <div class="chart-wrapper">
                             <canvas id="coolant-history-chart"></canvas>
                         </div>
                     </div>
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card thermal"><div class="chart-title">
                             Oil Temperature History
                         </div>
+                        <div class="chart-axis-unit">°F</div>
 
                         <div class="chart-wrapper">
                             <canvas id="oil-temp-history-chart"></canvas>
                         </div>
                     </div>
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card airflow"><div class="chart-title">
                             Mass Air Flow History
                         </div>
+                        <div class="chart-axis-unit">g/s</div>
 
                         <div class="chart-wrapper">
                             <canvas id="maf-history-chart"></canvas>
                         </div>
                     </div>
 
-                    <div class="chart-card">
-                        <div class="chart-title">
+                    <div class="chart-card airflow"><div class="chart-title">
                             Manifold Pressure History
                         </div>
+                        <div class="chart-axis-unit">kPa</div>
 
                         <div class="chart-wrapper">
                             <canvas id="map-history-chart"></canvas>
@@ -1064,13 +1608,16 @@
             `;
 
             renderAlarmTimeline(events);
+            bindPlaybackControls(tripId);
+            refreshPlaybackStatus();
 
             rpmChart = createHistoryChart(
                 "rpm-history-chart",
                 "RPM",
                 "RPM",
                 samples,
-                "rpm"
+                "rpm",
+                "#38bdf8"
             );
 
             speedChart = createHistoryChart(
@@ -1078,7 +1625,8 @@
                 "Speed",
                 "mph",
                 samples,
-                "speed_mph"
+                "speed_mph",
+                "#38bdf8"
             );
 
             throttleChart = createHistoryChart(
@@ -1086,7 +1634,8 @@
                 "Throttle",
                 "%",
                 samples,
-                "throttle_pct"
+                "throttle_pct",
+                "#38bdf8"
             );
 
             loadChart = createHistoryChart(
@@ -1094,7 +1643,8 @@
                 "Engine Load",
                 "%",
                 samples,
-                "load_pct"
+                "load_pct",
+                "#38bdf8"
             );
 
             coolantChart = createHistoryChart(
@@ -1102,7 +1652,8 @@
                 "Coolant Temperature",
                 "°F",
                 samples,
-                "coolant_temp_f"
+                "coolant_temp_f",
+                "#fb923c"
             );
 
             oilTempChart = createHistoryChart(
@@ -1110,7 +1661,8 @@
                 "Oil Temperature",
                 "°F",
                 samples,
-                "oil_temp_f"
+                "oil_temp_f",
+                "#fb923c"
             );
 
             mafChart = createHistoryChart(
@@ -1118,7 +1670,8 @@
                 "Mass Air Flow",
                 "g/s",
                 samples,
-                "maf_gps"
+                "maf_gps",
+                "#34d399"
             );
 
             mapChart = createHistoryChart(
@@ -1126,7 +1679,8 @@
                 "Manifold Pressure",
                 "kPa",
                 samples,
-                "manifold_pressure_kpa"
+                "manifold_pressure_kpa",
+                "#34d399"
             );
         }
 

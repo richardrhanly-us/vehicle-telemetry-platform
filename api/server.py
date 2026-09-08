@@ -3,29 +3,52 @@ import json
 from contextlib import suppress
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import (
+    FastAPI,
+    HTTPException,
+    WebSocket,
+    WebSocketDisconnect,
+)
 from fastapi.responses import FileResponse
 
 import telemetry.runtime_state as runtime_state
-from telemetry.trip_controller import trip_controller
+from telemetry.playback_controller import (
+    MAX_PLAYBACK_SPEED,
+    MIN_PLAYBACK_SPEED,
+    playback_controller,
+)
+from telemetry.trip_controller import (
+    trip_controller,
+)
 
 app = FastAPI()
 
 DASHBOARD_FILE = Path(__file__).parent / "dashboard.html"
+
 TRIPS_PAGE_FILE = Path(__file__).parent / "trips.html"
+
 TRIPS_DIR = Path("data") / "trips"
 
 
 def get_trip_id(metadata_file):
     filename = metadata_file.name
+
     return filename.removeprefix("trip_").removesuffix("_metadata.json")
 
 
 def load_json_file(file_path):
     try:
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(
+            file_path,
+            "r",
+            encoding="utf-8",
+        ) as file:
             return json.load(file)
-    except (OSError, json.JSONDecodeError):
+
+    except (
+        OSError,
+        json.JSONDecodeError,
+    ):
         return None
 
 
@@ -33,7 +56,11 @@ def load_jsonl_file(file_path):
     items = []
 
     try:
-        with open(file_path, "r", encoding="utf-8") as file:
+        with open(
+            file_path,
+            "r",
+            encoding="utf-8",
+        ) as file:
             for line in file:
                 line = line.strip()
 
@@ -42,8 +69,10 @@ def load_jsonl_file(file_path):
 
                 try:
                     items.append(json.loads(line))
+
                 except json.JSONDecodeError:
                     continue
+
     except OSError:
         return []
 
@@ -58,7 +87,10 @@ def load_trip_events(file_path):
     return load_jsonl_file(file_path)
 
 
-def build_trip_summary(trip_id, metadata):
+def build_trip_summary(
+    trip_id,
+    metadata,
+):
     vehicle = metadata.get("vehicle")
 
     if vehicle is None:
@@ -80,27 +112,13 @@ def build_trip_summary(trip_id, metadata):
         "max_speed_mph": metadata.get("max_speed_mph"),
         "average_rpm": metadata.get("average_rpm"),
         "average_speed_mph": metadata.get("average_speed_mph"),
-        "average_sample_duration_ms": metadata.get(
-            "average_sample_duration_ms"
-        ),
-        "average_sample_rate_hz": metadata.get(
-            "average_sample_rate_hz"
-        ),
-        "total_missing_values": metadata.get(
-            "total_missing_values"
-        ),
-        "total_query_failures": metadata.get(
-            "total_query_failures"
-        ),
-        "moving_time_seconds": metadata.get(
-            "moving_time_seconds"
-        ),
-        "stopped_time_seconds": metadata.get(
-            "stopped_time_seconds"
-        ),
-        "average_moving_speed_mph": metadata.get(
-            "average_moving_speed_mph"
-        ),
+        "average_sample_duration_ms": (metadata.get("average_sample_duration_ms")),
+        "average_sample_rate_hz": (metadata.get("average_sample_rate_hz")),
+        "total_missing_values": metadata.get("total_missing_values"),
+        "total_query_failures": metadata.get("total_query_failures"),
+        "moving_time_seconds": metadata.get("moving_time_seconds"),
+        "stopped_time_seconds": metadata.get("stopped_time_seconds"),
+        "average_moving_speed_mph": (metadata.get("average_moving_speed_mph")),
         "alarm_event_count": metadata.get(
             "alarm_event_count",
             0,
@@ -145,7 +163,15 @@ def get_vehicle_status():
 
 
 @app.post("/api/vehicle/scan")
-def scan_vehicle(interactive: bool = False):
+def scan_vehicle(
+    interactive: bool = False,
+):
+    if playback_controller.is_active():
+        raise HTTPException(
+            status_code=409,
+            detail=("Vehicle scan cannot start during trip playback."),
+        )
+
     started = trip_controller.scan_vehicle(
         interactive=interactive,
     )
@@ -153,10 +179,7 @@ def scan_vehicle(interactive: bool = False):
     if not started:
         raise HTTPException(
             status_code=409,
-            detail=(
-                "Vehicle scan cannot start while "
-                "another scan or trip is active."
-            ),
+            detail=("Vehicle scan cannot start while another scan or trip is active."),
         )
 
     return trip_controller.get_vehicle_status()
@@ -164,11 +187,21 @@ def scan_vehicle(interactive: bool = False):
 
 @app.get("/api/trip/status")
 def get_trip_status():
-    return trip_controller.get_status()
+    status = trip_controller.get_status()
+
+    status["playback"] = playback_controller.get_status()
+
+    return status
 
 
 @app.post("/api/trip/start")
 def start_trip():
+    if playback_controller.is_active():
+        raise HTTPException(
+            status_code=409,
+            detail=("A recorded trip is currently playing back."),
+        )
+
     started = trip_controller.start_trip()
 
     if not started:
@@ -176,11 +209,9 @@ def start_trip():
 
         if not status["vehicle_ready"]:
             detail = "No vehicle has been identified."
+
         else:
-            detail = (
-                "A trip or vehicle scan "
-                "is already active."
-            )
+            detail = "A trip or vehicle scan is already active."
 
         raise HTTPException(
             status_code=409,
@@ -197,10 +228,106 @@ def stop_trip():
     if not stopped:
         raise HTTPException(
             status_code=409,
-            detail="No trip is currently recording.",
+            detail=("No trip is currently recording."),
         )
 
     return trip_controller.get_status()
+
+
+@app.get("/api/playback/status")
+def get_playback_status():
+    return playback_controller.get_status()
+
+
+@app.post("/api/playback/start/{trip_id}")
+def start_playback(
+    trip_id: str,
+    speed: float = 1.0,
+):
+    if trip_controller.is_recording():
+        raise HTTPException(
+            status_code=409,
+            detail=("Stop the active trip before starting playback."),
+        )
+
+    if not (MIN_PLAYBACK_SPEED <= speed <= MAX_PLAYBACK_SPEED):
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Playback speed must be between "
+                f"{MIN_PLAYBACK_SPEED}x and "
+                f"{MAX_PLAYBACK_SPEED}x."
+            ),
+        )
+
+    if "/" in trip_id or "\\" in trip_id or ".." in trip_id:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid trip ID.",
+        )
+
+    started = playback_controller.start(
+        trip_id,
+        speed=speed,
+    )
+
+    if not started:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Playback could not start. "
+                "The trip may not exist or another "
+                "playback may already be active."
+            ),
+        )
+
+    return playback_controller.get_status()
+
+
+@app.post("/api/playback/pause")
+def pause_playback():
+    if not playback_controller.pause():
+        raise HTTPException(
+            status_code=409,
+            detail=("Playback is not currently playing."),
+        )
+
+    return playback_controller.get_status()
+
+
+@app.post("/api/playback/resume")
+def resume_playback():
+    if not playback_controller.resume():
+        raise HTTPException(
+            status_code=409,
+            detail=("Playback is not currently paused."),
+        )
+
+    return playback_controller.get_status()
+
+
+@app.post("/api/playback/stop")
+def stop_playback():
+    if not playback_controller.stop():
+        raise HTTPException(
+            status_code=409,
+            detail=("No playback is currently active."),
+        )
+
+    return playback_controller.get_status()
+
+
+@app.post("/api/playback/speed")
+def set_playback_speed(
+    speed: float,
+):
+    if not playback_controller.set_speed(speed):
+        raise HTTPException(
+            status_code=409,
+            detail=("Playback speed could not be changed."),
+        )
+
+    return playback_controller.get_status()
 
 
 @app.get("/api/trips")
@@ -209,9 +336,8 @@ def get_trips():
         return []
 
     trips = []
-    metadata_files = TRIPS_DIR.glob(
-        "trip_*_metadata.json"
-    )
+
+    metadata_files = TRIPS_DIR.glob("trip_*_metadata.json")
 
     for metadata_file in metadata_files:
         metadata = load_json_file(metadata_file)
@@ -229,9 +355,7 @@ def get_trips():
         trips.append(trip)
 
     trips.sort(
-        key=lambda trip: (
-            trip.get("start_time") or ""
-        ),
+        key=lambda trip: trip.get("start_time") or "",
         reverse=True,
     )
 
@@ -240,30 +364,17 @@ def get_trips():
 
 @app.get("/api/trips/{trip_id}")
 def get_trip(trip_id: str):
-    if (
-        "/" in trip_id
-        or "\\" in trip_id
-        or ".." in trip_id
-    ):
+    if "/" in trip_id or "\\" in trip_id or ".." in trip_id:
         raise HTTPException(
             status_code=400,
             detail="Invalid trip ID.",
         )
 
-    metadata_file = (
-        TRIPS_DIR
-        / f"trip_{trip_id}_metadata.json"
-    )
+    metadata_file = TRIPS_DIR / f"trip_{trip_id}_metadata.json"
 
-    trip_file = (
-        TRIPS_DIR
-        / f"trip_{trip_id}.jsonl"
-    )
+    trip_file = TRIPS_DIR / f"trip_{trip_id}.jsonl"
 
-    events_file = (
-        TRIPS_DIR
-        / f"trip_{trip_id}_events.jsonl"
-    )
+    events_file = TRIPS_DIR / f"trip_{trip_id}_events.jsonl"
 
     if not metadata_file.exists():
         raise HTTPException(
@@ -276,14 +387,16 @@ def get_trip(trip_id: str):
     if metadata is None:
         raise HTTPException(
             status_code=500,
-            detail="Trip metadata could not be read.",
+            detail=("Trip metadata could not be read."),
         )
 
     samples = []
+
     if trip_file.exists():
         samples = load_trip_samples(trip_file)
 
     events = []
+
     if events_file.exists():
         events = load_trip_events(events_file)
 
@@ -306,14 +419,14 @@ def get_trip(trip_id: str):
 
 
 @app.websocket("/ws/telemetry")
-async def telemetry_websocket(websocket: WebSocket):
+async def telemetry_websocket(
+    websocket: WebSocket,
+):
     await websocket.accept()
 
-    last_sequence_sent = None
+    last_revision_sent = None
 
-    disconnect_task = asyncio.create_task(
-        websocket.receive()
-    )
+    disconnect_task = asyncio.create_task(websocket.receive())
 
     try:
         while True:
@@ -325,32 +438,20 @@ async def telemetry_websocket(websocket: WebSocket):
             if disconnect_task in done:
                 message = disconnect_task.result()
 
-                if (
-                    message["type"]
-                    == "websocket.disconnect"
-                ):
+                if message["type"] == "websocket.disconnect":
                     break
 
-                disconnect_task = (
-                    asyncio.create_task(
-                        websocket.receive()
-                    )
-                )
+                disconnect_task = asyncio.create_task(websocket.receive())
 
-            if runtime_state.latest_sample is not None:
-                current_sequence = (
-                    runtime_state.latest_sample["sequence"]
-                )
+            current_revision = runtime_state.latest_sample_revision
 
-                if (
-                    current_sequence
-                    != last_sequence_sent
-                ):
-                    await websocket.send_json(
-                        runtime_state.latest_sample
-                    )
+            if (
+                runtime_state.latest_sample is not None
+                and current_revision != last_revision_sent
+            ):
+                await websocket.send_json(runtime_state.latest_sample)
 
-                    last_sequence_sent = current_sequence
+                last_revision_sent = current_revision
 
     except WebSocketDisconnect:
         pass
@@ -359,9 +460,7 @@ async def telemetry_websocket(websocket: WebSocket):
         if not disconnect_task.done():
             disconnect_task.cancel()
 
-            with suppress(
-                asyncio.CancelledError
-            ):
+            with suppress(asyncio.CancelledError):
                 await disconnect_task
 
         print("Telemetry WebSocket closed.")
