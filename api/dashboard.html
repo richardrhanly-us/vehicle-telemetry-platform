@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Nominal Telemetry</title>
@@ -9,320 +13,527 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+
         * {
+
             box-sizing: border-box;
+
         }
 
         body {
+
             font-family: Arial, sans-serif;
+
             background: #111827;
+
             color: #f9fafb;
+
             margin: 0;
+
             padding: 30px;
+
         }
 
         .container {
+
             max-width: 1200px;
+
             margin: 0 auto;
+
         }
 
         .topbar {
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: flex-start;
+
             gap: 24px;
+
             margin-bottom: 30px;
+
         }
 
         h1 {
+
             margin: 0 0 8px 0;
+
             font-size: 32px;
+
         }
 
         .vehicle-name {
+
             font-size: 18px;
+
             font-weight: 600;
+
             margin-bottom: 4px;
+
         }
 
         .connection-status {
+
             color: #9ca3af;
+
         }
 
         .controls {
+
             display: flex;
+
             align-items: center;
+
             gap: 10px;
+
             flex-wrap: wrap;
+
         }
 
         .button {
+
             border: none;
+
             border-radius: 8px;
+
             padding: 11px 16px;
+
             font-size: 14px;
+
             font-weight: 600;
+
             cursor: pointer;
+
             text-decoration: none;
+
             color: #f9fafb;
+
             background: #374151;
+
         }
 
         .button:hover:not(:disabled) {
+
             background: #4b5563;
+
         }
 
         .button:disabled {
+
             opacity: 0.45;
+
             cursor: not-allowed;
+
         }
 
         .scan-button {
+
             background: #1d4ed8;
+
         }
 
         .scan-button:hover:not(:disabled) {
+
             background: #2563eb;
+
         }
 
         .start-button {
+
             background: #166534;
+
         }
 
         .start-button:hover:not(:disabled) {
+
             background: #15803d;
+
         }
 
         .stop-button {
+
             background: #991b1b;
+
         }
 
         .stop-button:hover:not(:disabled) {
+
             background: #b91c1c;
+
         }
 
         .trip-state {
+
             display: inline-flex;
+
             align-items: center;
+
             gap: 8px;
+
             margin-top: 10px;
+
             font-size: 14px;
+
             color: #d1d5db;
+
         }
 
         .state-dot {
+
             width: 9px;
+
             height: 9px;
+
             border-radius: 50%;
+
             background: #6b7280;
+
         }
 
         .state-dot.ready {
+
             background: #3b82f6;
+
         }
 
         .state-dot.scanning {
+
             background: #3b82f6;
+
         }
 
         .state-dot.recording {
+
             background: #22c55e;
+
         }
 
         .state-dot.stopping {
+
             background: #f59e0b;
+
         }
 
         .error-message {
+
             display: none;
+
             margin-top: 12px;
+
             padding: 12px 14px;
+
             border-radius: 8px;
+
             background: #3f1d1d;
+
             color: #fecaca;
+
         }
+
 
 
         .live-alarm-panel {
+
             display: none;
+
             margin: 0 0 24px 0;
+
             border-radius: 12px;
+
             padding: 16px 18px;
+
             border: 1px solid #92400e;
+
             border-left: 5px solid #f59e0b;
+
             background: #2a1f0f;
+
         }
 
         .live-alarm-panel.active {
+
             display: block;
+
         }
 
         .live-alarm-header {
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             gap: 16px;
+
             margin-bottom: 8px;
+
         }
 
         .live-alarm-title {
+
             font-size: 18px;
+
             font-weight: 700;
+
             color: #fde68a;
+
         }
 
         .live-alarm-badge {
+
             border-radius: 999px;
+
             padding: 4px 9px;
+
             font-size: 11px;
+
             font-weight: 700;
+
             text-transform: uppercase;
+
             background: #92400e;
+
             color: #fef3c7;
+
         }
 
         .live-alarm-details {
+
             color: #fef3c7;
+
             font-size: 14px;
+
             line-height: 1.5;
+
         }
 
         .alarm-clear-message {
+
             display: none;
+
             margin: 0 0 24px 0;
+
             border-radius: 10px;
+
             padding: 12px 14px;
+
             border-left: 4px solid #10b981;
+
             background: #0f2d26;
+
             color: #a7f3d0;
+
         }
 
         .alarm-clear-message.active {
+
             display: block;
+
         }
 
         .grid {
+
             display: grid;
+
             grid-template-columns: repeat(2, minmax(250px, 1fr));
+
             gap: 20px;
+
         }
 
         .card {
+
             background: #1f2937;
+
             border-radius: 12px;
+
             padding: 20px;
+
         }
 
         .label {
+
             color: #9ca3af;
+
             font-size: 14px;
+
             margin-bottom: 8px;
+
         }
 
         .value {
+
             font-size: 32px;
+
             font-weight: bold;
+
         }
 
         .charts {
+
             display: grid;
+
             grid-template-columns: repeat(2, minmax(0, 1fr));
+
             gap: 20px;
+
             margin-top: 30px;
+
         }
 
         .chart-card {
+
             background: #1f2937;
+
             border-radius: 12px;
+
             padding: 20px;
+
             min-height: 320px;
+
         }
 
         .chart-title {
+
             font-size: 18px;
+
             font-weight: 600;
+
             margin-bottom: 15px;
+
         }
 
         .chart-wrapper {
+
             position: relative;
+
             height: 250px;
+
         }
 
         .health {
+
             margin-top: 30px;
+
         }
 
         .health-title {
+
             font-size: 18px;
+
             font-weight: 600;
+
             margin-bottom: 10px;
+
         }
 
         .health-row {
+
             display: flex;
+
             justify-content: space-between;
+
             gap: 20px;
+
             padding: 11px 0;
+
             border-bottom: 1px solid #374151;
+
         }
 
         .health-row:last-child {
+
             border-bottom: none;
+
         }
 
         .health-label {
+
             color: #d1d5db;
+
         }
 
         .health-value {
+
             text-align: right;
+
         }
 
         .timestamp {
+
             font-family: monospace;
+
             font-size: 13px;
+
             word-break: break-all;
+
         }
 
         @media (max-width: 800px) {
+
             .topbar {
+
                 flex-direction: column;
+
             }
 
             .controls {
+
                 width: 100%;
+
             }
+
         }
 
         @media (max-width: 700px) {
+
             body {
+
                 padding: 18px;
+
             }
 
             .grid,
+
             .charts {
+
                 grid-template-columns: 1fr;
+
             }
 
             h1 {
+
                 font-size: 26px;
+
             }
 
             .value {
+
                 font-size: 28px;
+
             }
 
             .health-row {
+
                 flex-direction: column;
+
                 gap: 4px;
+
             }
 
             .health-value {
+
                 text-align: left;
+
             }
+
         }
+
     </style>
+
 </head>
 
 <body>
@@ -332,137 +543,275 @@
         <div class="topbar">
 
             <div>
+
                 <h1>Nominal Vehicle Telemetry</h1>
 
                 <div id="vehicle-name" class="vehicle-name">
+
                     No active vehicle
+
                 </div>
 
                 <div id="connection" class="connection-status">
+
                     No trip recording
+
                 </div>
 
                 <div class="trip-state">
+
                     <span id="state-dot" class="state-dot"></span>
+
                     <span id="trip-state">Idle</span>
+
                 </div>
 
                 <div id="error-message" class="error-message"></div>
+
             </div>
 
             <div class="controls">
+
                 <button
+
                     id="scan-vehicle"
+
                     class="button scan-button"
+
                     type="button"
+
                 >
+
                     Scan Vehicle
+
                 </button>
 
                 <button
+
                     id="start-trip"
+
                     class="button start-button"
+
                     type="button"
+
                 >
+
                     Start Trip
+
                 </button>
 
                 <button
+
                     id="stop-trip"
+
                     class="button stop-button"
+
                     type="button"
+
                     disabled
+
                 >
+
                     Stop Trip
+
                 </button>
 
                 <a
+
                     class="button"
+
                     href="/trips"
+
                 >
+
                     Trip History
+
                 </a>
+
             </div>
 
         </div>
 
 
+
         <div id="live-alarm-panel" class="live-alarm-panel">
+
             <div class="live-alarm-header">
+
                 <div id="live-alarm-title" class="live-alarm-title">
+
                     Active Alarm
+
                 </div>
+
                 <div id="live-alarm-badge" class="live-alarm-badge">
+
                     Warning
+
                 </div>
+
             </div>
+
             <div id="live-alarm-details" class="live-alarm-details"></div>
+
         </div>
 
         <div id="alarm-clear-message" class="alarm-clear-message"></div>
 
-        <div class="grid">
-
-            <div class="card">
-                <div class="label">RPM</div>
-                <div class="value" id="rpm">--</div>
+        <div class="metric-section">
+            <div class="metric-section-title">
+                Powertrain
             </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="label">RPM</div>
+                    <div class="value" id="rpm">--</div>
+                </div>
 
-            <div class="card">
-                <div class="label">Speed</div>
-                <div class="value">
-                    <span id="speed">--</span> mph
+                <div class="card">
+                    <div class="label">Speed</div>
+                    <div class="value">
+                        <span id="speed">--</span> mph
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="label">Throttle</div>
+                    <div class="value">
+                        <span id="throttle">--</span> %
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="label">Engine Load</div>
+                    <div class="value">
+                        <span id="load">--</span> %
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card">
-                <div class="label">Throttle</div>
-                <div class="value">
-                    <span id="throttle">--</span> %
+        <div class="metric-section">
+            <div class="metric-section-title">
+                Thermal
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="label">
+                        Engine Coolant Temperature
+                    </div>
+                    <div class="value">
+                        <span id="coolant-temp">--</span> °F
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="label">
+                        Intake Air Temperature
+                    </div>
+                    <div class="value">
+                        <span id="intake-temp">--</span> °F
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="label">
+                        Ambient Air Temperature
+                    </div>
+                    <div class="value">
+                        <span id="ambient-temp">--</span> °F
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card">
-                <div class="label">Engine Load</div>
-                <div class="value">
-                    <span id="load">--</span> %
+        <div class="metric-section">
+            <div class="metric-section-title">
+                Airflow & Pressure
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="label">Mass Air Flow</div>
+                    <div class="value">
+                        <span id="maf">--</span> g/s
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="label">
+                        Manifold Absolute Pressure
+                    </div>
+                    <div class="value">
+                        <span id="manifold-pressure">--</span> kPa
+                    </div>
                 </div>
             </div>
+        </div>
 
+        <div class="metric-section">
+            <div class="metric-section-title">
+                Electrical
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="label">
+                        Control Module Voltage
+                    </div>
+                    <div class="value">
+                        <span id="module-voltage">--</span> V
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="charts">
 
             <div class="chart-card">
+
                 <div class="chart-title">RPM History</div>
 
                 <div class="chart-wrapper">
+
                     <canvas id="rpm-chart"></canvas>
+
                 </div>
+
             </div>
 
             <div class="chart-card">
+
                 <div class="chart-title">Speed History</div>
 
                 <div class="chart-wrapper">
+
                     <canvas id="speed-chart"></canvas>
+
                 </div>
+
             </div>
 
             <div class="chart-card">
+
                 <div class="chart-title">Throttle History</div>
 
                 <div class="chart-wrapper">
+
                     <canvas id="throttle-chart"></canvas>
+
                 </div>
+
             </div>
 
             <div class="chart-card">
+
                 <div class="chart-title">Engine Load History</div>
 
                 <div class="chart-wrapper">
+
                     <canvas id="load-chart"></canvas>
+
                 </div>
+
             </div>
 
         </div>
@@ -470,43 +819,65 @@
         <div class="card health">
 
             <div class="health-title">
+
                 Acquisition Health
+
             </div>
 
             <div class="health-row">
+
                 <span class="health-label">Sequence</span>
+
                 <span class="health-value" id="sequence">--</span>
+
             </div>
 
             <div class="health-row">
+
                 <span class="health-label">Sample Rate</span>
 
                 <span class="health-value">
+
                     <span id="sample-rate">--</span> Hz
+
                 </span>
+
             </div>
 
             <div class="health-row">
+
                 <span class="health-label">Sample Duration</span>
 
                 <span class="health-value">
+
                     <span id="sample-duration">--</span> ms
+
                 </span>
+
             </div>
 
             <div class="health-row">
+
                 <span class="health-label">Missing Values</span>
+
                 <span class="health-value" id="missing">--</span>
+
             </div>
 
             <div class="health-row">
+
                 <span class="health-label">Query Failures</span>
+
                 <span class="health-value" id="failures">--</span>
+
             </div>
 
             <div class="health-row">
+
                 <span class="health-label">Timestamp</span>
+
                 <span class="health-value timestamp" id="timestamp">--</span>
+
             </div>
 
         </div>
@@ -514,757 +885,1207 @@
     </div>
 
     <script>
+
         const MAX_CHART_SAMPLES = 60;
 
         const scanButton =
+
             document.getElementById("scan-vehicle");
 
         const startButton =
+
             document.getElementById("start-trip");
 
         const stopButton =
+
             document.getElementById("stop-trip");
 
         const tripState =
+
             document.getElementById("trip-state");
 
         const stateDot =
+
             document.getElementById("state-dot");
 
         const errorMessage =
+
             document.getElementById("error-message");
 
         let currentTripState = "idle";
+
         let currentVehicleState = "waiting";
+
         let vehicleReady = false;
+
         let lastAlarmEventKey = null;
+
         let alarmClearTimer = null;
 
 
+
         function formatMake(make) {
+
             if (!make) {
+
                 return "";
+
             }
 
             return make
+
                 .toLowerCase()
+
                 .replace(
+
                     /\b\w/g,
+
                     character => character.toUpperCase()
+
                 );
+
         }
+
 
 
         function renderVehicle(vehicle) {
+
             const vehicleName =
+
                 document.getElementById("vehicle-name");
 
             if (
+
                 vehicle &&
+
                 vehicle.year &&
+
                 vehicle.make &&
+
                 vehicle.model
+
             ) {
+
                 const make =
+
                     formatMake(vehicle.make);
 
                 vehicleName.textContent =
+
                     `${vehicle.year} ${make} ${vehicle.model}`;
 
                 return;
+
             }
 
             vehicleName.textContent =
+
                 "No active vehicle";
+
         }
+
 
 
         function clearTelemetryDisplay() {
+
             document.getElementById("rpm").textContent =
+
                 "--";
 
             document.getElementById("speed").textContent =
+
                 "--";
 
             document.getElementById("throttle").textContent =
+
                 "--";
 
             document.getElementById("load").textContent =
+
                 "--";
 
             document.getElementById("sequence").textContent =
+
                 "--";
 
             document.getElementById("sample-rate").textContent =
+
                 "--";
 
             document.getElementById("sample-duration").textContent =
+
                 "--";
 
             document.getElementById("missing").textContent =
+
                 "--";
 
             document.getElementById("failures").textContent =
+
                 "--";
 
             document.getElementById("timestamp").textContent =
+
                 "--";
+
         }
+
 
 
         function createTelemetryChart(
+
             canvasId,
+
             label,
+
             yAxisTitle
+
         ) {
+
             const context =
+
                 document
+
                     .getElementById(canvasId)
+
                     .getContext("2d");
 
             return new Chart(context, {
+
                 type: "line",
 
                 data: {
+
                     labels: [],
 
                     datasets: [
+
                         {
+
                             label: label,
+
                             data: [],
+
                             borderWidth: 2,
+
                             pointRadius: 0,
+
                             tension: 0.25
+
                         }
+
                     ]
+
                 },
 
                 options: {
+
                     responsive: true,
+
                     maintainAspectRatio: false,
+
                     animation: false,
 
                     plugins: {
+
                         legend: {
+
                             display: false
+
                         }
+
                     },
 
                     scales: {
+
                         x: {
+
                             ticks: {
+
                                 color: "#9ca3af",
+
                                 maxTicksLimit: 6
+
                             },
 
                             grid: {
+
                                 color: "#374151"
+
                             },
 
                             title: {
+
                                 display: true,
+
                                 text: "Sequence",
+
                                 color: "#9ca3af"
+
                             }
+
                         },
 
                         y: {
+
                             beginAtZero: true,
 
                             ticks: {
+
                                 color: "#9ca3af"
+
                             },
 
                             grid: {
+
                                 color: "#374151"
+
                             },
 
                             title: {
+
                                 display: true,
+
                                 text: yAxisTitle,
+
                                 color: "#9ca3af"
+
                             }
+
                         }
+
                     }
+
                 }
+
             });
+
         }
+
 
 
         function addChartSample(
+
             chart,
+
             sequence,
+
             value
+
         ) {
+
             chart.data.labels.push(sequence);
+
             chart.data.datasets[0].data.push(value);
 
             if (
+
                 chart.data.labels.length
+
                 > MAX_CHART_SAMPLES
+
             ) {
+
                 chart.data.labels.shift();
+
                 chart.data.datasets[0].data.shift();
+
             }
 
             chart.update("none");
+
         }
+
 
 
         function clearChart(chart) {
+
             chart.data.labels = [];
+
             chart.data.datasets[0].data = [];
+
             chart.update("none");
+
         }
+
 
 
         const rpmChart = createTelemetryChart(
+
             "rpm-chart",
+
             "RPM",
+
             "RPM"
+
         );
 
         const speedChart = createTelemetryChart(
+
             "speed-chart",
+
             "Speed",
+
             "mph"
+
         );
 
         const throttleChart = createTelemetryChart(
+
             "throttle-chart",
+
             "Throttle",
+
             "%"
+
         );
 
         const loadChart = createTelemetryChart(
+
             "load-chart",
+
             "Engine Load",
+
             "%"
+
         );
 
 
+
         function clearAllCharts() {
+
             clearChart(rpmChart);
+
             clearChart(speedChart);
+
             clearChart(throttleChart);
+
             clearChart(loadChart);
+
         }
+
 
 
         function showError(message) {
+
             if (!message) {
+
                 errorMessage.style.display = "none";
+
                 errorMessage.textContent = "";
+
                 return;
+
             }
 
             errorMessage.textContent = message;
+
             errorMessage.style.display = "block";
+
         }
+
+
 
 
 
         function formatAlarmValue(value) {
+
             if (
+
                 value === null
+
                 || value === undefined
+
             ) {
+
                 return "N/A";
+
             }
 
             return value;
+
         }
 
 
+
         function renderLiveAlarms(
+
             activeAlarms,
+
             latestAlarmEvent
+
         ) {
+
             const panel =
+
                 document.getElementById(
+
                     "live-alarm-panel"
+
                 );
 
             const title =
+
                 document.getElementById(
+
                     "live-alarm-title"
+
                 );
 
             const badge =
+
                 document.getElementById(
+
                     "live-alarm-badge"
+
                 );
 
             const details =
+
                 document.getElementById(
+
                     "live-alarm-details"
+
                 );
 
             const clearMessage =
+
                 document.getElementById(
+
                     "alarm-clear-message"
+
                 );
 
             if (
+
                 activeAlarms
+
                 && activeAlarms.length > 0
+
             ) {
+
                 const alarm = activeAlarms[0];
 
                 title.textContent =
+
                     alarm.rule || "Active Alarm";
 
                 badge.textContent =
+
                     alarm.severity || "warning";
 
                 details.textContent =
+
                     `${alarm.field || "value"} `
+
                     + `${formatAlarmValue(alarm.value)} `
+
                     + `${alarm.operator || ""}`
+
                     + `${formatAlarmValue(alarm.threshold)}`;
 
                 panel.classList.add("active");
 
             } else {
+
                 panel.classList.remove("active");
+
             }
 
             if (!latestAlarmEvent) {
+
                 return;
+
             }
 
             const eventKey =
+
                 `${latestAlarmEvent.type}|`
+
                 + `${latestAlarmEvent.rule}|`
+
                 + `${latestAlarmEvent.timestamp}`;
 
             if (eventKey === lastAlarmEventKey) {
+
                 return;
+
             }
 
             lastAlarmEventKey = eventKey;
 
             if (
+
                 latestAlarmEvent.type
+
                 === "cleared"
+
             ) {
+
                 clearMessage.textContent =
+
                     `${latestAlarmEvent.rule} cleared`;
 
                 clearMessage.classList.add(
+
                     "active"
+
                 );
 
                 if (alarmClearTimer) {
+
                     clearTimeout(
+
                         alarmClearTimer
+
                     );
+
                 }
 
                 alarmClearTimer = setTimeout(
+
                     function () {
+
                         clearMessage.classList.remove(
+
                             "active"
+
                         );
+
                     },
+
                     4000
+
                 );
+
             }
+
         }
+
 
 
         function renderStatus(
+
             tripStatus,
+
             vehicleStatus
+
         ) {
+
             currentTripState =
+
                 tripStatus.state;
 
             currentVehicleState =
+
                 vehicleStatus.state;
 
             vehicleReady =
+
                 vehicleStatus.ready;
 
             renderLiveAlarms(
+
                 tripStatus.active_alarms || [],
+
                 tripStatus.latest_alarm_event || null
+
             );
 
             renderVehicle(
+
                 vehicleStatus.vehicle
+
             );
 
             stateDot.className =
+
                 "state-dot";
 
             if (
+
                 tripStatus.state === "recording"
+
             ) {
+
                 tripState.textContent =
+
                     "Recording";
 
                 stateDot.classList.add(
+
                     "recording"
+
                 );
 
                 scanButton.disabled = true;
+
                 startButton.disabled = true;
+
                 stopButton.disabled = false;
 
                 document
+
                     .getElementById("connection")
+
                     .textContent =
+
                         "Vehicle connected · trip recording";
 
             } else if (
+
                 tripStatus.state === "stopping"
+
             ) {
+
                 tripState.textContent =
+
                     "Stopping";
 
                 stateDot.classList.add(
+
                     "stopping"
+
                 );
 
                 scanButton.disabled = true;
+
                 startButton.disabled = true;
+
                 stopButton.disabled = true;
 
                 document
+
                     .getElementById("connection")
+
                     .textContent =
+
                         "Finalizing trip...";
 
             } else if (
+
                 vehicleStatus.state === "scanning"
+
             ) {
+
                 tripState.textContent =
+
                     "Scanning";
 
                 stateDot.classList.add(
+
                     "scanning"
+
                 );
 
                 scanButton.disabled = true;
+
                 startButton.disabled = true;
+
                 stopButton.disabled = true;
 
                 document
+
                     .getElementById("vehicle-name")
+
                     .textContent =
+
                         "Scanning for vehicle...";
 
                 document
+
                     .getElementById("connection")
+
                     .textContent =
+
                         "Checking OBD-II connection";
 
             } else if (vehicleStatus.ready) {
+
                 tripState.textContent =
+
                     "Vehicle Ready";
 
                 stateDot.classList.add(
+
                     "ready"
+
                 );
 
                 scanButton.disabled = false;
+
                 startButton.disabled = false;
+
                 stopButton.disabled = true;
 
                 document
+
                     .getElementById("connection")
+
                     .textContent =
+
                         "Vehicle identified";
 
             } else {
+
                 tripState.textContent =
+
                     "Waiting for vehicle";
 
                 scanButton.disabled = false;
+
                 startButton.disabled = true;
+
                 stopButton.disabled = true;
 
                 document
+
                     .getElementById("connection")
+
                     .textContent =
+
                         "OBD-II vehicle not detected";
+
             }
 
             showError(
+
                 tripStatus.error
+
                 || vehicleStatus.error
+
             );
+
         }
+
 
 
         async function refreshStatus() {
+
             try {
+
                 const [
+
                     tripResponse,
+
                     vehicleResponse
+
                 ] = await Promise.all([
+
                     fetch("/api/trip/status"),
+
                     fetch("/api/vehicle/status")
+
                 ]);
 
                 const tripStatus =
+
                     await tripResponse.json();
 
                 const vehicleStatus =
+
                     await vehicleResponse.json();
 
                 renderStatus(
+
                     tripStatus,
+
                     vehicleStatus
+
                 );
 
             } catch (error) {
+
                 showError(
+
                     "Unable to read system status."
+
                 );
+
             }
+
         }
 
 
+
         async function requestVehicleScan(
+
             interactive
+
         ) {
+
             showError(null);
 
             try {
+
                 const response =
+
                     await fetch(
+
                         `/api/vehicle/scan?interactive=${interactive}`,
+
                         {
+
                             method: "POST"
+
                         }
+
                     );
 
                 if (
+
                     !response.ok
+
                     && response.status !== 409
+
                 ) {
+
                     const data =
+
                         await response.json();
 
                     throw new Error(
+
                         data.detail
+
                         || "Unable to scan for vehicle."
+
                     );
+
                 }
 
                 await refreshStatus();
 
             } catch (error) {
+
                 showError(error.message);
+
             }
+
         }
+
 
 
         async function autoScanVehicle() {
+
             if (
+
                 currentTripState !== "idle"
+
                 || vehicleReady
+
                 || currentVehicleState === "scanning"
+
             ) {
+
                 return;
+
             }
 
             await requestVehicleScan(false);
+
         }
 
 
+
         async function startTrip() {
+
             startButton.disabled = true;
 
             showError(null);
 
             clearTelemetryDisplay();
+
             clearAllCharts();
 
             document
+
                 .getElementById("connection")
+
                 .textContent =
+
                     "Starting trip...";
 
             try {
+
                 const response =
+
                     await fetch(
+
                         "/api/trip/start",
+
                         {
+
                             method: "POST"
+
                         }
+
                     );
 
                 const data =
+
                     await response.json();
 
                 if (!response.ok) {
+
                     throw new Error(
+
                         data.detail
+
                         || "Unable to start trip."
+
                     );
+
                 }
 
                 await refreshStatus();
 
             } catch (error) {
+
                 showError(error.message);
 
                 await refreshStatus();
+
             }
+
         }
 
 
+
         async function stopTrip() {
+
             stopButton.disabled = true;
 
             showError(null);
 
             try {
+
                 const response =
+
                     await fetch(
+
                         "/api/trip/stop",
+
                         {
+
                             method: "POST"
+
                         }
+
                     );
 
                 const data =
+
                     await response.json();
 
                 if (!response.ok) {
+
                     throw new Error(
+
                         data.detail
+
                         || "Unable to stop trip."
+
                     );
+
                 }
 
                 await refreshStatus();
 
             } catch (error) {
+
                 showError(error.message);
 
                 await refreshStatus();
+
             }
+
         }
 
 
+
         scanButton.addEventListener(
+
             "click",
+
             function () {
+
                 requestVehicleScan(true);
+
             }
+
         );
+
 
 
         startButton.addEventListener(
+
             "click",
+
             startTrip
+
         );
+
 
 
         stopButton.addEventListener(
+
             "click",
+
             stopTrip
+
         );
+
 
 
         const socket = new WebSocket(
+
             `ws://${window.location.host}/ws/telemetry`
+
         );
 
 
+
         socket.onmessage = function (event) {
+
             const sample =
+
                 JSON.parse(event.data);
 
             document.getElementById("rpm").textContent =
+
                 sample.rpm ?? "N/A";
 
             document.getElementById("speed").textContent =
+
                 sample.speed_mph ?? "N/A";
 
             document.getElementById("throttle").textContent =
+
                 sample.throttle_pct ?? "N/A";
 
             document.getElementById("load").textContent =
+
                 sample.load_pct ?? "N/A";
 
             document.getElementById("sequence").textContent =
+
                 sample.sequence;
 
             document.getElementById("sample-rate").textContent =
+
                 sample.sample_rate_hz ?? "N/A";
 
             document.getElementById("sample-duration").textContent =
+
                 sample.sample_duration_ms ?? "N/A";
 
             document.getElementById("missing").textContent =
+
                 sample.missing_values;
 
             document.getElementById("failures").textContent =
+
                 sample.query_failures;
 
             document.getElementById("timestamp").textContent =
+
                 sample.timestamp;
 
             addChartSample(
+
                 rpmChart,
+
                 sample.sequence,
+
                 sample.rpm
+
             );
 
             addChartSample(
+
                 speedChart,
+
                 sample.sequence,
+
                 sample.speed_mph
+
             );
 
             addChartSample(
+
                 throttleChart,
+
                 sample.sequence,
+
                 sample.throttle_pct
+
             );
 
             addChartSample(
+
                 loadChart,
+
                 sample.sequence,
+
                 sample.load_pct
+
             );
+
         };
+
 
 
         socket.onclose = function () {
+
             if (
+
                 currentTripState === "recording"
+
             ) {
+
                 document
+
                     .getElementById("connection")
+
                     .textContent =
+
                         "Telemetry connection lost";
+
             }
+
         };
+
 
 
         refreshStatus();
 
         setTimeout(
+
             autoScanVehicle,
+
             500
+
         );
 
         setInterval(
+
             refreshStatus,
+
             500
+
         );
 
         setInterval(
+
             autoScanVehicle,
+
             3000
+
         );
+
     </script>
 
 </body>
+
 </html>
