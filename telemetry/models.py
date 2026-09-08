@@ -22,6 +22,9 @@ class TelemetrySample:
     coolant_temp_f: float | None
     intake_temp_f: float | None
     ambient_temp_f: float | None
+    oil_temp_f: float | None
+    catalyst_temp_b1s1_f: float | None
+    catalyst_temp_b1s2_f: float | None
     maf_gps: float | None
     manifold_pressure_kpa: float | None
     module_voltage_v: float | None
@@ -43,6 +46,9 @@ class TelemetrySample:
             "coolant_temp_f": self.coolant_temp_f,
             "intake_temp_f": self.intake_temp_f,
             "ambient_temp_f": self.ambient_temp_f,
+            "oil_temp_f": self.oil_temp_f,
+            "catalyst_temp_b1s1_f": self.catalyst_temp_b1s1_f,
+            "catalyst_temp_b1s2_f": self.catalyst_temp_b1s2_f,
             "maf_gps": self.maf_gps,
             "manifold_pressure_kpa": self.manifold_pressure_kpa,
             "module_voltage_v": self.module_voltage_v,

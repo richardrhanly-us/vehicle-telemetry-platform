@@ -374,6 +374,10 @@
         let speedChart = null;
         let throttleChart = null;
         let loadChart = null;
+        let coolantChart = null;
+        let oilTempChart = null;
+        let mafChart = null;
+        let mapChart = null;
 
 
         function formatVehicle(vehicle) {
@@ -434,7 +438,11 @@
                 rpmChart,
                 speedChart,
                 throttleChart,
-                loadChart
+                loadChart,
+                coolantChart,
+                oilTempChart,
+                mafChart,
+                mapChart
             ];
 
             for (const chart of charts) {
@@ -447,6 +455,10 @@
             speedChart = null;
             throttleChart = null;
             loadChart = null;
+            coolantChart = null;
+            oilTempChart = null;
+            mafChart = null;
+            mapChart = null;
         }
 
 
@@ -912,6 +924,46 @@
                         </div>
                     </div>
 
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            Coolant Temperature History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="coolant-history-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            Oil Temperature History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="oil-temp-history-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            Mass Air Flow History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="maf-history-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            Manifold Pressure History
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="map-history-chart"></canvas>
+                        </div>
+                    </div>
+
                 </div>
 
 
@@ -1043,6 +1095,38 @@
                 "%",
                 samples,
                 "load_pct"
+            );
+
+            coolantChart = createHistoryChart(
+                "coolant-history-chart",
+                "Coolant Temperature",
+                "°F",
+                samples,
+                "coolant_temp_f"
+            );
+
+            oilTempChart = createHistoryChart(
+                "oil-temp-history-chart",
+                "Oil Temperature",
+                "°F",
+                samples,
+                "oil_temp_f"
+            );
+
+            mafChart = createHistoryChart(
+                "maf-history-chart",
+                "Mass Air Flow",
+                "g/s",
+                samples,
+                "maf_gps"
+            );
+
+            mapChart = createHistoryChart(
+                "map-history-chart",
+                "Manifold Pressure",
+                "kPa",
+                samples,
+                "manifold_pressure_kpa"
             );
         }
 

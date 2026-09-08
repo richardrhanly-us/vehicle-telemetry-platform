@@ -334,6 +334,35 @@
 
         }
 
+
+        .metric-section {
+            margin-top: 34px;
+        }
+
+        .metric-section:first-of-type {
+            margin-top: 0;
+        }
+
+        .metric-section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 14px 0;
+            padding: 0 2px;
+            color: #93c5fd;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .metric-section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #374151;
+        }
+
         .grid {
 
             display: grid;
@@ -722,6 +751,33 @@
                         <span id="ambient-temp">--</span> °F
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="label">
+                        Engine Oil Temperature
+                    </div>
+                    <div class="value">
+                        <span id="oil-temp">--</span> °F
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="label">
+                        Catalyst Temp Bank 1 Sensor 1
+                    </div>
+                    <div class="value">
+                        <span id="catalyst-b1s1-temp">--</span> °F
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="label">
+                        Catalyst Temp Bank 1 Sensor 2
+                    </div>
+                    <div class="value">
+                        <span id="catalyst-b1s2-temp">--</span> °F
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -809,6 +865,54 @@
                 <div class="chart-wrapper">
 
                     <canvas id="load-chart"></canvas>
+
+                </div>
+
+            </div>
+
+            <div class="chart-card">
+
+                <div class="chart-title">Coolant Temperature History</div>
+
+                <div class="chart-wrapper">
+
+                    <canvas id="coolant-chart"></canvas>
+
+                </div>
+
+            </div>
+
+            <div class="chart-card">
+
+                <div class="chart-title">Oil Temperature History</div>
+
+                <div class="chart-wrapper">
+
+                    <canvas id="oil-temp-chart"></canvas>
+
+                </div>
+
+            </div>
+
+            <div class="chart-card">
+
+                <div class="chart-title">Mass Air Flow History</div>
+
+                <div class="chart-wrapper">
+
+                    <canvas id="maf-chart"></canvas>
+
+                </div>
+
+            </div>
+
+            <div class="chart-card">
+
+                <div class="chart-title">Manifold Pressure History</div>
+
+                <div class="chart-wrapper">
+
+                    <canvas id="map-chart"></canvas>
 
                 </div>
 
@@ -1001,6 +1105,40 @@
                 "--";
 
             document.getElementById("load").textContent =
+
+                "--";
+            document.getElementById("coolant-temp").textContent =
+
+                "--";
+
+            document.getElementById("intake-temp").textContent =
+
+                "--";
+
+            document.getElementById("ambient-temp").textContent =
+
+                "--";
+            document.getElementById("oil-temp").textContent =
+
+                "--";
+
+            document.getElementById("catalyst-b1s1-temp").textContent =
+
+                "--";
+
+            document.getElementById("catalyst-b1s2-temp").textContent =
+
+                "--";
+
+            document.getElementById("maf").textContent =
+
+                "--";
+
+            document.getElementById("manifold-pressure").textContent =
+
+                "--";
+
+            document.getElementById("module-voltage").textContent =
 
                 "--";
 
@@ -1250,6 +1388,46 @@
 
         );
 
+        const coolantChart = createTelemetryChart(
+
+            "coolant-chart",
+
+            "Coolant Temperature",
+
+            "°F"
+
+        );
+
+        const oilTempChart = createTelemetryChart(
+
+            "oil-temp-chart",
+
+            "Oil Temperature",
+
+            "°F"
+
+        );
+
+        const mafChart = createTelemetryChart(
+
+            "maf-chart",
+
+            "Mass Air Flow",
+
+            "g/s"
+
+        );
+
+        const mapChart = createTelemetryChart(
+
+            "map-chart",
+
+            "Manifold Pressure",
+
+            "kPa"
+
+        );
+
 
 
         function clearAllCharts() {
@@ -1261,6 +1439,14 @@
             clearChart(throttleChart);
 
             clearChart(loadChart);
+
+            clearChart(coolantChart);
+
+            clearChart(oilTempChart);
+
+            clearChart(mafChart);
+
+            clearChart(mapChart);
 
         }
 
@@ -1967,6 +2153,40 @@
             document.getElementById("load").textContent =
 
                 sample.load_pct ?? "N/A";
+            document.getElementById("coolant-temp").textContent =
+
+                sample.coolant_temp_f ?? "N/A";
+
+            document.getElementById("intake-temp").textContent =
+
+                sample.intake_temp_f ?? "N/A";
+
+            document.getElementById("ambient-temp").textContent =
+
+                sample.ambient_temp_f ?? "N/A";
+            document.getElementById("oil-temp").textContent =
+
+                sample.oil_temp_f ?? "N/A";
+
+            document.getElementById("catalyst-b1s1-temp").textContent =
+
+                sample.catalyst_temp_b1s1_f ?? "N/A";
+
+            document.getElementById("catalyst-b1s2-temp").textContent =
+
+                sample.catalyst_temp_b1s2_f ?? "N/A";
+
+            document.getElementById("maf").textContent =
+
+                sample.maf_gps ?? "N/A";
+
+            document.getElementById("manifold-pressure").textContent =
+
+                sample.manifold_pressure_kpa ?? "N/A";
+
+            document.getElementById("module-voltage").textContent =
+
+                sample.module_voltage_v ?? "N/A";
 
             document.getElementById("sequence").textContent =
 
@@ -2029,6 +2249,46 @@
                 sample.sequence,
 
                 sample.load_pct
+
+            );
+
+            addChartSample(
+
+                coolantChart,
+
+                sample.sequence,
+
+                sample.coolant_temp_f
+
+            );
+
+            addChartSample(
+
+                oilTempChart,
+
+                sample.sequence,
+
+                sample.oil_temp_f
+
+            );
+
+            addChartSample(
+
+                mafChart,
+
+                sample.sequence,
+
+                sample.maf_gps
+
+            );
+
+            addChartSample(
+
+                mapChart,
+
+                sample.sequence,
+
+                sample.manifold_pressure_kpa
 
             );
 

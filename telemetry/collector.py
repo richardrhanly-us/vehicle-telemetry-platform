@@ -59,6 +59,21 @@ AMBIENT_TEMP_COMMAND = getattr(
     "AMBIANT_AIR_TEMP",
     None,
 )
+OIL_TEMP_COMMAND = getattr(
+    obd.commands,
+    "OIL_TEMP",
+    None,
+)
+CATALYST_TEMP_B1S1_COMMAND = getattr(
+    obd.commands,
+    "CATALYST_TEMP_B1S1",
+    None,
+)
+CATALYST_TEMP_B1S2_COMMAND = getattr(
+    obd.commands,
+    "CATALYST_TEMP_B1S2",
+    None,
+)
 MAF_COMMAND = getattr(
     obd.commands,
     "MAF",
@@ -266,6 +281,18 @@ def collect_sample(
         connection,
         AMBIENT_TEMP_COMMAND,
     )
+    oil_temp_response = safe_optional_query(
+        connection,
+        OIL_TEMP_COMMAND,
+    )
+    catalyst_temp_b1s1_response = safe_optional_query(
+        connection,
+        CATALYST_TEMP_B1S1_COMMAND,
+    )
+    catalyst_temp_b1s2_response = safe_optional_query(
+        connection,
+        CATALYST_TEMP_B1S2_COMMAND,
+    )
     maf_response = safe_optional_query(
         connection,
         MAF_COMMAND,
@@ -318,6 +345,27 @@ def collect_sample(
             ambient_temp_response
         )
         if ambient_temp_response
+        else None
+    )
+    oil_temp_f = (
+        normalize_temperature_f(
+            oil_temp_response
+        )
+        if oil_temp_response
+        else None
+    )
+    catalyst_temp_b1s1_f = (
+        normalize_temperature_f(
+            catalyst_temp_b1s1_response
+        )
+        if catalyst_temp_b1s1_response
+        else None
+    )
+    catalyst_temp_b1s2_f = (
+        normalize_temperature_f(
+            catalyst_temp_b1s2_response
+        )
+        if catalyst_temp_b1s2_response
         else None
     )
     maf_gps = (
@@ -390,6 +438,9 @@ def collect_sample(
         coolant_temp_f=coolant_temp_f,
         intake_temp_f=intake_temp_f,
         ambient_temp_f=ambient_temp_f,
+        oil_temp_f=oil_temp_f,
+        catalyst_temp_b1s1_f=catalyst_temp_b1s1_f,
+        catalyst_temp_b1s2_f=catalyst_temp_b1s2_f,
         maf_gps=maf_gps,
         manifold_pressure_kpa=(
             manifold_pressure_kpa
@@ -646,6 +697,12 @@ def run_collector(
                     f"{sample.intake_temp_f if sample.intake_temp_f is not None else 'N/A'} "
                     f"AMBIENT_F="
                     f"{sample.ambient_temp_f if sample.ambient_temp_f is not None else 'N/A'} "
+                    f"OIL_F="
+                    f"{sample.oil_temp_f if sample.oil_temp_f is not None else 'N/A'} "
+                    f"CAT_B1S1_F="
+                    f"{sample.catalyst_temp_b1s1_f if sample.catalyst_temp_b1s1_f is not None else 'N/A'} "
+                    f"CAT_B1S2_F="
+                    f"{sample.catalyst_temp_b1s2_f if sample.catalyst_temp_b1s2_f is not None else 'N/A'} "
                     f"MAF_GPS="
                     f"{sample.maf_gps if sample.maf_gps is not None else 'N/A'} "
                     f"MAP_KPA="

@@ -15,6 +15,30 @@
       "threshold": 90,
       "duration_seconds": 3,
       "severity": "warning"
+    },
+    {
+      "name": "Elevated Coolant Temperature",
+      "field": "coolant_temp_f",
+      "operator": ">",
+      "threshold": 215,
+      "duration_seconds": 10,
+      "severity": "warning"
+    },
+    {
+      "name": "Critical Coolant Temperature",
+      "field": "coolant_temp_f",
+      "operator": ">",
+      "threshold": 230,
+      "duration_seconds": 3,
+      "severity": "critical"
+    },
+    {
+      "name": "High Oil Temperature",
+      "field": "oil_temp_f",
+      "operator": ">",
+      "threshold": 250,
+      "duration_seconds": 5,
+      "severity": "warning"
     }
   ]
 }
