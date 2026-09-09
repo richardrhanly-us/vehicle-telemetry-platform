@@ -1,0 +1,1984 @@
+{
+  "metadata": {
+    "start_time": "2026-09-09T01:11:45.313494+00:00",
+    "duration_seconds": 217.4,
+    "distance_miles": 0.98,
+    "sample_count": 179,
+    "max_speed_mph": 28.0,
+    "max_rpm": 2699,
+    "average_speed_mph": 16.2,
+    "average_rpm": 1278.2,
+    "vehicle": {
+      "year": "2017",
+      "make": "TOYOTA",
+      "model": "COROLLA iM"
+    }
+  },
+  "samples": [
+    {
+      "sequence": 1,
+      "timestamp": "2026-09-09T01:11:45.313494+00:00",
+      "rpm": 848,
+      "speed_mph": 0.0,
+      "load_pct": 47.8,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 2,
+      "timestamp": "2026-09-09T01:11:46.900754+00:00",
+      "rpm": 852,
+      "speed_mph": 0.0,
+      "load_pct": 47.8,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 3,
+      "timestamp": "2026-09-09T01:11:48.105217+00:00",
+      "rpm": 854,
+      "speed_mph": 0.0,
+      "load_pct": 47.8,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 4,
+      "timestamp": "2026-09-09T01:11:49.318600+00:00",
+      "rpm": 847,
+      "speed_mph": 0.0,
+      "load_pct": 47.5,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.14
+    },
+    {
+      "sequence": 5,
+      "timestamp": "2026-09-09T01:11:50.517302+00:00",
+      "rpm": 830,
+      "speed_mph": 0.0,
+      "load_pct": 59.6,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 6,
+      "timestamp": "2026-09-09T01:11:51.724874+00:00",
+      "rpm": 1178,
+      "speed_mph": 0.0,
+      "load_pct": 66.7,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.26
+    },
+    {
+      "sequence": 7,
+      "timestamp": "2026-09-09T01:11:52.930109+00:00",
+      "rpm": 802,
+      "speed_mph": 0.0,
+      "load_pct": 60.0,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.02
+    },
+    {
+      "sequence": 8,
+      "timestamp": "2026-09-09T01:11:54.126084+00:00",
+      "rpm": 850,
+      "speed_mph": 0.0,
+      "load_pct": 60.0,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 9,
+      "timestamp": "2026-09-09T01:11:55.340783+00:00",
+      "rpm": 850,
+      "speed_mph": 0.0,
+      "load_pct": 59.2,
+      "coolant_temp_f": 167.0,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 10,
+      "timestamp": "2026-09-09T01:11:56.555710+00:00",
+      "rpm": 848,
+      "speed_mph": 0.0,
+      "load_pct": 58.8,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 11,
+      "timestamp": "2026-09-09T01:11:57.748492+00:00",
+      "rpm": 860,
+      "speed_mph": 2.5,
+      "load_pct": 58.8,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 12,
+      "timestamp": "2026-09-09T01:11:58.985939+00:00",
+      "rpm": 869,
+      "speed_mph": 1.9,
+      "load_pct": 58.0,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 13,
+      "timestamp": "2026-09-09T01:12:00.211523+00:00",
+      "rpm": 868,
+      "speed_mph": 2.5,
+      "load_pct": 57.3,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 14,
+      "timestamp": "2026-09-09T01:12:01.427407+00:00",
+      "rpm": 842,
+      "speed_mph": 1.9,
+      "load_pct": 56.9,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 15,
+      "timestamp": "2026-09-09T01:12:02.653004+00:00",
+      "rpm": 836,
+      "speed_mph": 1.9,
+      "load_pct": 57.3,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 131.0,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 16,
+      "timestamp": "2026-09-09T01:12:03.859772+00:00",
+      "rpm": 828,
+      "speed_mph": 1.9,
+      "load_pct": 57.6,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 17,
+      "timestamp": "2026-09-09T01:12:05.059698+00:00",
+      "rpm": 829,
+      "speed_mph": 1.9,
+      "load_pct": 59.2,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 18,
+      "timestamp": "2026-09-09T01:12:06.264828+00:00",
+      "rpm": 988,
+      "speed_mph": 1.9,
+      "load_pct": 58.0,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 19,
+      "timestamp": "2026-09-09T01:12:07.458991+00:00",
+      "rpm": 1065,
+      "speed_mph": 1.9,
+      "load_pct": 60.4,
+      "coolant_temp_f": 168.8,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 20,
+      "timestamp": "2026-09-09T01:12:08.667697+00:00",
+      "rpm": 1235,
+      "speed_mph": 2.5,
+      "load_pct": 71.8,
+      "coolant_temp_f": 170.6,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 21,
+      "timestamp": "2026-09-09T01:12:09.860390+00:00",
+      "rpm": 1345,
+      "speed_mph": 2.5,
+      "load_pct": 61.6,
+      "coolant_temp_f": 170.6,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.13
+    },
+    {
+      "sequence": 22,
+      "timestamp": "2026-09-09T01:12:11.066485+00:00",
+      "rpm": 1052,
+      "speed_mph": 3.1,
+      "load_pct": 66.7,
+      "coolant_temp_f": 170.6,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 23,
+      "timestamp": "2026-09-09T01:12:12.261356+00:00",
+      "rpm": 764,
+      "speed_mph": 3.1,
+      "load_pct": 67.5,
+      "coolant_temp_f": 170.6,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 12.99
+    },
+    {
+      "sequence": 24,
+      "timestamp": "2026-09-09T01:12:13.472856+00:00",
+      "rpm": 1515,
+      "speed_mph": 1.9,
+      "load_pct": 96.1,
+      "coolant_temp_f": 170.6,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.26
+    },
+    {
+      "sequence": 25,
+      "timestamp": "2026-09-09T01:12:14.692619+00:00",
+      "rpm": 1643,
+      "speed_mph": 2.5,
+      "load_pct": 96.1,
+      "coolant_temp_f": 170.6,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 26,
+      "timestamp": "2026-09-09T01:12:15.902740+00:00",
+      "rpm": 2262,
+      "speed_mph": 6.2,
+      "load_pct": 88.6,
+      "coolant_temp_f": 172.4,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.28
+    },
+    {
+      "sequence": 27,
+      "timestamp": "2026-09-09T01:12:17.098403+00:00",
+      "rpm": 2699,
+      "speed_mph": 12.4,
+      "load_pct": 89.8,
+      "coolant_temp_f": 172.4,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 28,
+      "timestamp": "2026-09-09T01:12:18.308431+00:00",
+      "rpm": 2229,
+      "speed_mph": 15.5,
+      "load_pct": 87.8,
+      "coolant_temp_f": 172.4,
+      "oil_temp_f": 132.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 29,
+      "timestamp": "2026-09-09T01:12:19.511615+00:00",
+      "rpm": 1839,
+      "speed_mph": 20.5,
+      "load_pct": 81.6,
+      "coolant_temp_f": 172.4,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 30,
+      "timestamp": "2026-09-09T01:12:20.707026+00:00",
+      "rpm": 1769,
+      "speed_mph": 21.7,
+      "load_pct": 80.4,
+      "coolant_temp_f": 172.4,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 31,
+      "timestamp": "2026-09-09T01:12:22.019168+00:00",
+      "rpm": 1392,
+      "speed_mph": 24.2,
+      "load_pct": 65.1,
+      "coolant_temp_f": 174.2,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 32,
+      "timestamp": "2026-09-09T01:12:23.225019+00:00",
+      "rpm": 1159,
+      "speed_mph": 24.9,
+      "load_pct": 47.8,
+      "coolant_temp_f": 174.2,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 33,
+      "timestamp": "2026-09-09T01:12:24.439125+00:00",
+      "rpm": 1182,
+      "speed_mph": 24.9,
+      "load_pct": 41.2,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 34,
+      "timestamp": "2026-09-09T01:12:25.653866+00:00",
+      "rpm": 1200,
+      "speed_mph": 24.2,
+      "load_pct": 47.8,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 35,
+      "timestamp": "2026-09-09T01:12:26.867715+00:00",
+      "rpm": 1195,
+      "speed_mph": 23.6,
+      "load_pct": 63.9,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 36,
+      "timestamp": "2026-09-09T01:12:28.098139+00:00",
+      "rpm": 1201,
+      "speed_mph": 23.0,
+      "load_pct": 74.5,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 37,
+      "timestamp": "2026-09-09T01:12:29.291299+00:00",
+      "rpm": 1226,
+      "speed_mph": 24.2,
+      "load_pct": 82.7,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.17
+    },
+    {
+      "sequence": 38,
+      "timestamp": "2026-09-09T01:12:30.500480+00:00",
+      "rpm": 1148,
+      "speed_mph": 25.5,
+      "load_pct": 68.2,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 39,
+      "timestamp": "2026-09-09T01:12:31.725280+00:00",
+      "rpm": 1198,
+      "speed_mph": 26.7,
+      "load_pct": 69.8,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 134.6,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 40,
+      "timestamp": "2026-09-09T01:12:32.936251+00:00",
+      "rpm": 1197,
+      "speed_mph": 26.1,
+      "load_pct": 74.1,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 41,
+      "timestamp": "2026-09-09T01:12:34.184418+00:00",
+      "rpm": 1310,
+      "speed_mph": 26.1,
+      "load_pct": 93.3,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 42,
+      "timestamp": "2026-09-09T01:12:35.402925+00:00",
+      "rpm": 1194,
+      "speed_mph": 26.1,
+      "load_pct": 71.8,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 43,
+      "timestamp": "2026-09-09T01:12:36.608287+00:00",
+      "rpm": 1189,
+      "speed_mph": 26.1,
+      "load_pct": 70.6,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 44,
+      "timestamp": "2026-09-09T01:12:37.814432+00:00",
+      "rpm": 1333,
+      "speed_mph": 25.5,
+      "load_pct": 85.5,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.17
+    },
+    {
+      "sequence": 45,
+      "timestamp": "2026-09-09T01:12:39.158934+00:00",
+      "rpm": 1161,
+      "speed_mph": 26.7,
+      "load_pct": 68.2,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 46,
+      "timestamp": "2026-09-09T01:12:40.387532+00:00",
+      "rpm": 1266,
+      "speed_mph": 25.5,
+      "load_pct": 86.7,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 47,
+      "timestamp": "2026-09-09T01:12:41.589802+00:00",
+      "rpm": 1188,
+      "speed_mph": 24.9,
+      "load_pct": 80.4,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 48,
+      "timestamp": "2026-09-09T01:12:42.818783+00:00",
+      "rpm": 1170,
+      "speed_mph": 26.1,
+      "load_pct": 71.8,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 136.4,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 49,
+      "timestamp": "2026-09-09T01:12:44.023283+00:00",
+      "rpm": 1208,
+      "speed_mph": 24.9,
+      "load_pct": 70.6,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.17
+    },
+    {
+      "sequence": 50,
+      "timestamp": "2026-09-09T01:12:45.223502+00:00",
+      "rpm": 1212,
+      "speed_mph": 23.6,
+      "load_pct": 92.9,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 51,
+      "timestamp": "2026-09-09T01:12:46.415849+00:00",
+      "rpm": 1323,
+      "speed_mph": 24.9,
+      "load_pct": 95.3,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 52,
+      "timestamp": "2026-09-09T01:12:47.635753+00:00",
+      "rpm": 1696,
+      "speed_mph": 24.2,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 53,
+      "timestamp": "2026-09-09T01:12:48.835679+00:00",
+      "rpm": 1944,
+      "speed_mph": 26.7,
+      "load_pct": 83.9,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 54,
+      "timestamp": "2026-09-09T01:12:50.050768+00:00",
+      "rpm": 1205,
+      "speed_mph": 26.7,
+      "load_pct": 61.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 55,
+      "timestamp": "2026-09-09T01:12:51.251313+00:00",
+      "rpm": 1177,
+      "speed_mph": 28.0,
+      "load_pct": 69.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 56,
+      "timestamp": "2026-09-09T01:12:52.450492+00:00",
+      "rpm": 1203,
+      "speed_mph": 26.7,
+      "load_pct": 73.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 57,
+      "timestamp": "2026-09-09T01:12:53.679974+00:00",
+      "rpm": 1185,
+      "speed_mph": 25.5,
+      "load_pct": 89.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 58,
+      "timestamp": "2026-09-09T01:12:54.896806+00:00",
+      "rpm": 1132,
+      "speed_mph": 25.5,
+      "load_pct": 72.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 59,
+      "timestamp": "2026-09-09T01:12:56.097782+00:00",
+      "rpm": 1322,
+      "speed_mph": 24.9,
+      "load_pct": 96.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 60,
+      "timestamp": "2026-09-09T01:12:57.295417+00:00",
+      "rpm": 1238,
+      "speed_mph": 25.5,
+      "load_pct": 81.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 61,
+      "timestamp": "2026-09-09T01:12:58.509245+00:00",
+      "rpm": 1168,
+      "speed_mph": 25.5,
+      "load_pct": 69.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 62,
+      "timestamp": "2026-09-09T01:12:59.765642+00:00",
+      "rpm": 1156,
+      "speed_mph": 24.2,
+      "load_pct": 70.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 63,
+      "timestamp": "2026-09-09T01:13:00.969126+00:00",
+      "rpm": 1190,
+      "speed_mph": 19.3,
+      "load_pct": 76.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 64,
+      "timestamp": "2026-09-09T01:13:02.181652+00:00",
+      "rpm": 1168,
+      "speed_mph": 14.9,
+      "load_pct": 74.9,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 138.2,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 65,
+      "timestamp": "2026-09-09T01:13:03.400726+00:00",
+      "rpm": 1462,
+      "speed_mph": 10.6,
+      "load_pct": 89.4,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 66,
+      "timestamp": "2026-09-09T01:13:04.595829+00:00",
+      "rpm": 2038,
+      "speed_mph": 9.9,
+      "load_pct": 91.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 67,
+      "timestamp": "2026-09-09T01:13:05.833428+00:00",
+      "rpm": 1936,
+      "speed_mph": 13.7,
+      "load_pct": 92.9,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 68,
+      "timestamp": "2026-09-09T01:13:07.040839+00:00",
+      "rpm": 2070,
+      "speed_mph": 16.8,
+      "load_pct": 89.4,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 69,
+      "timestamp": "2026-09-09T01:13:08.251583+00:00",
+      "rpm": 2111,
+      "speed_mph": 21.1,
+      "load_pct": 89.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 70,
+      "timestamp": "2026-09-09T01:13:09.459353+00:00",
+      "rpm": 2020,
+      "speed_mph": 24.2,
+      "load_pct": 86.3,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 71,
+      "timestamp": "2026-09-09T01:13:10.667696+00:00",
+      "rpm": 1522,
+      "speed_mph": 25.5,
+      "load_pct": 75.7,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 72,
+      "timestamp": "2026-09-09T01:13:11.860577+00:00",
+      "rpm": 1183,
+      "speed_mph": 28.0,
+      "load_pct": 53.3,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 73,
+      "timestamp": "2026-09-09T01:13:13.061879+00:00",
+      "rpm": 1148,
+      "speed_mph": 28.0,
+      "load_pct": 50.2,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 74,
+      "timestamp": "2026-09-09T01:13:14.266622+00:00",
+      "rpm": 1180,
+      "speed_mph": 26.7,
+      "load_pct": 49.4,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 140.0,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 75,
+      "timestamp": "2026-09-09T01:13:15.460616+00:00",
+      "rpm": 1154,
+      "speed_mph": 26.7,
+      "load_pct": 40.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 76,
+      "timestamp": "2026-09-09T01:13:16.685469+00:00",
+      "rpm": 1188,
+      "speed_mph": 26.1,
+      "load_pct": 39.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 77,
+      "timestamp": "2026-09-09T01:13:17.891254+00:00",
+      "rpm": 1186,
+      "speed_mph": 24.9,
+      "load_pct": 58.4,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 78,
+      "timestamp": "2026-09-09T01:13:19.098539+00:00",
+      "rpm": 1301,
+      "speed_mph": 24.2,
+      "load_pct": 95.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 79,
+      "timestamp": "2026-09-09T01:13:20.323078+00:00",
+      "rpm": 1376,
+      "speed_mph": 25.5,
+      "load_pct": 90.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 80,
+      "timestamp": "2026-09-09T01:13:21.515437+00:00",
+      "rpm": 1286,
+      "speed_mph": 24.9,
+      "load_pct": 75.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 81,
+      "timestamp": "2026-09-09T01:13:22.736288+00:00",
+      "rpm": 1154,
+      "speed_mph": 26.1,
+      "load_pct": 66.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 82,
+      "timestamp": "2026-09-09T01:13:23.932072+00:00",
+      "rpm": 1280,
+      "speed_mph": 26.1,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 83,
+      "timestamp": "2026-09-09T01:13:25.140779+00:00",
+      "rpm": 1381,
+      "speed_mph": 24.9,
+      "load_pct": 94.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 84,
+      "timestamp": "2026-09-09T01:13:26.381533+00:00",
+      "rpm": 1240,
+      "speed_mph": 25.5,
+      "load_pct": 91.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 85,
+      "timestamp": "2026-09-09T01:13:27.581538+00:00",
+      "rpm": 1157,
+      "speed_mph": 24.9,
+      "load_pct": 68.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 141.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 86,
+      "timestamp": "2026-09-09T01:13:28.784492+00:00",
+      "rpm": 962,
+      "speed_mph": 24.2,
+      "load_pct": 71.4,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 87,
+      "timestamp": "2026-09-09T01:13:29.999445+00:00",
+      "rpm": 1246,
+      "speed_mph": 19.3,
+      "load_pct": 75.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 88,
+      "timestamp": "2026-09-09T01:13:31.200584+00:00",
+      "rpm": 1416,
+      "speed_mph": 16.2,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.24
+    },
+    {
+      "sequence": 89,
+      "timestamp": "2026-09-09T01:13:32.414035+00:00",
+      "rpm": 1074,
+      "speed_mph": 14.3,
+      "load_pct": 67.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 90,
+      "timestamp": "2026-09-09T01:13:33.633283+00:00",
+      "rpm": 1227,
+      "speed_mph": 10.6,
+      "load_pct": 68.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 91,
+      "timestamp": "2026-09-09T01:13:34.829621+00:00",
+      "rpm": 1486,
+      "speed_mph": 8.1,
+      "load_pct": 91.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.27
+    },
+    {
+      "sequence": 92,
+      "timestamp": "2026-09-09T01:13:36.046079+00:00",
+      "rpm": 1711,
+      "speed_mph": 6.2,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 93,
+      "timestamp": "2026-09-09T01:13:37.259449+00:00",
+      "rpm": 1846,
+      "speed_mph": 7.5,
+      "load_pct": 91.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.24
+    },
+    {
+      "sequence": 94,
+      "timestamp": "2026-09-09T01:13:38.463709+00:00",
+      "rpm": 1931,
+      "speed_mph": 10.6,
+      "load_pct": 91.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 95,
+      "timestamp": "2026-09-09T01:13:39.663091+00:00",
+      "rpm": 1943,
+      "speed_mph": 14.3,
+      "load_pct": 91.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 96,
+      "timestamp": "2026-09-09T01:13:40.865786+00:00",
+      "rpm": 1922,
+      "speed_mph": 16.8,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 143.6,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 97,
+      "timestamp": "2026-09-09T01:13:42.067360+00:00",
+      "rpm": 1922,
+      "speed_mph": 18.0,
+      "load_pct": 92.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 98,
+      "timestamp": "2026-09-09T01:13:43.270535+00:00",
+      "rpm": 1916,
+      "speed_mph": 20.5,
+      "load_pct": 92.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 99,
+      "timestamp": "2026-09-09T01:13:44.465800+00:00",
+      "rpm": 1877,
+      "speed_mph": 21.7,
+      "load_pct": 89.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 100,
+      "timestamp": "2026-09-09T01:13:45.667527+00:00",
+      "rpm": 1475,
+      "speed_mph": 23.0,
+      "load_pct": 93.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.26
+    },
+    {
+      "sequence": 101,
+      "timestamp": "2026-09-09T01:13:46.899594+00:00",
+      "rpm": 1456,
+      "speed_mph": 23.6,
+      "load_pct": 91.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.24
+    },
+    {
+      "sequence": 102,
+      "timestamp": "2026-09-09T01:13:48.096637+00:00",
+      "rpm": 1483,
+      "speed_mph": 23.0,
+      "load_pct": 91.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 103,
+      "timestamp": "2026-09-09T01:13:49.323702+00:00",
+      "rpm": 1467,
+      "speed_mph": 24.2,
+      "load_pct": 91.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 104,
+      "timestamp": "2026-09-09T01:13:50.547488+00:00",
+      "rpm": 1402,
+      "speed_mph": 24.2,
+      "load_pct": 89.8,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 105,
+      "timestamp": "2026-09-09T01:13:51.754355+00:00",
+      "rpm": 1357,
+      "speed_mph": 24.2,
+      "load_pct": 89.8,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 106,
+      "timestamp": "2026-09-09T01:13:52.968295+00:00",
+      "rpm": 1201,
+      "speed_mph": 24.2,
+      "load_pct": 89.8,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 107,
+      "timestamp": "2026-09-09T01:13:54.176545+00:00",
+      "rpm": 1191,
+      "speed_mph": 24.2,
+      "load_pct": 90.2,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 108,
+      "timestamp": "2026-09-09T01:13:55.387861+00:00",
+      "rpm": 1208,
+      "speed_mph": 23.6,
+      "load_pct": 90.6,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 109,
+      "timestamp": "2026-09-09T01:13:56.578973+00:00",
+      "rpm": 1258,
+      "speed_mph": 23.6,
+      "load_pct": 90.6,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 145.4,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 110,
+      "timestamp": "2026-09-09T01:13:57.787095+00:00",
+      "rpm": 1150,
+      "speed_mph": 23.0,
+      "load_pct": 87.8,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 111,
+      "timestamp": "2026-09-09T01:13:58.994090+00:00",
+      "rpm": 1155,
+      "speed_mph": 24.2,
+      "load_pct": 88.6,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 112,
+      "timestamp": "2026-09-09T01:14:00.203325+00:00",
+      "rpm": 1202,
+      "speed_mph": 23.6,
+      "load_pct": 76.5,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 113,
+      "timestamp": "2026-09-09T01:14:01.410728+00:00",
+      "rpm": 1155,
+      "speed_mph": 22.4,
+      "load_pct": 86.7,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 114,
+      "timestamp": "2026-09-09T01:14:02.625263+00:00",
+      "rpm": 1212,
+      "speed_mph": 22.4,
+      "load_pct": 91.4,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 115,
+      "timestamp": "2026-09-09T01:14:03.833689+00:00",
+      "rpm": 1584,
+      "speed_mph": 22.4,
+      "load_pct": 92.5,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 116,
+      "timestamp": "2026-09-09T01:14:05.036746+00:00",
+      "rpm": 1488,
+      "speed_mph": 22.4,
+      "load_pct": 92.2,
+      "coolant_temp_f": 179.6,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 117,
+      "timestamp": "2026-09-09T01:14:06.245665+00:00",
+      "rpm": 1306,
+      "speed_mph": 23.6,
+      "load_pct": 87.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 118,
+      "timestamp": "2026-09-09T01:14:07.446855+00:00",
+      "rpm": 1229,
+      "speed_mph": 23.0,
+      "load_pct": 87.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 119,
+      "timestamp": "2026-09-09T01:14:08.664696+00:00",
+      "rpm": 1172,
+      "speed_mph": 24.2,
+      "load_pct": 88.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 120,
+      "timestamp": "2026-09-09T01:14:09.865509+00:00",
+      "rpm": 1177,
+      "speed_mph": 23.6,
+      "load_pct": 89.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 121,
+      "timestamp": "2026-09-09T01:14:11.075377+00:00",
+      "rpm": 1184,
+      "speed_mph": 23.0,
+      "load_pct": 89.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 147.2,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 122,
+      "timestamp": "2026-09-09T01:14:12.268148+00:00",
+      "rpm": 1139,
+      "speed_mph": 23.6,
+      "load_pct": 87.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 123,
+      "timestamp": "2026-09-09T01:14:13.467085+00:00",
+      "rpm": 1395,
+      "speed_mph": 22.4,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 124,
+      "timestamp": "2026-09-09T01:14:14.666435+00:00",
+      "rpm": 1607,
+      "speed_mph": 23.0,
+      "load_pct": 91.4,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 125,
+      "timestamp": "2026-09-09T01:14:15.884570+00:00",
+      "rpm": 1347,
+      "speed_mph": 24.2,
+      "load_pct": 87.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 126,
+      "timestamp": "2026-09-09T01:14:17.096033+00:00",
+      "rpm": 1454,
+      "speed_mph": 25.5,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 127,
+      "timestamp": "2026-09-09T01:14:18.298804+00:00",
+      "rpm": 1352,
+      "speed_mph": 24.2,
+      "load_pct": 89.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 128,
+      "timestamp": "2026-09-09T01:14:19.516402+00:00",
+      "rpm": 1202,
+      "speed_mph": 24.9,
+      "load_pct": 86.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 129,
+      "timestamp": "2026-09-09T01:14:20.715555+00:00",
+      "rpm": 1190,
+      "speed_mph": 24.2,
+      "load_pct": 75.3,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.24
+    },
+    {
+      "sequence": 130,
+      "timestamp": "2026-09-09T01:14:21.923424+00:00",
+      "rpm": 1169,
+      "speed_mph": 24.2,
+      "load_pct": 82.4,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 131,
+      "timestamp": "2026-09-09T01:14:23.114039+00:00",
+      "rpm": 1161,
+      "speed_mph": 23.0,
+      "load_pct": 89.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 132,
+      "timestamp": "2026-09-09T01:14:24.324209+00:00",
+      "rpm": 1211,
+      "speed_mph": 23.0,
+      "load_pct": 69.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 133,
+      "timestamp": "2026-09-09T01:14:25.520770+00:00",
+      "rpm": 1364,
+      "speed_mph": 22.4,
+      "load_pct": 92.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 134,
+      "timestamp": "2026-09-09T01:14:26.741484+00:00",
+      "rpm": 1335,
+      "speed_mph": 23.0,
+      "load_pct": 90.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 135,
+      "timestamp": "2026-09-09T01:14:27.934403+00:00",
+      "rpm": 1195,
+      "speed_mph": 24.2,
+      "load_pct": 87.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 136,
+      "timestamp": "2026-09-09T01:14:29.144302+00:00",
+      "rpm": 1248,
+      "speed_mph": 25.5,
+      "load_pct": 90.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 149.0,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 137,
+      "timestamp": "2026-09-09T01:14:30.352942+00:00",
+      "rpm": 1208,
+      "speed_mph": 24.9,
+      "load_pct": 68.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 138,
+      "timestamp": "2026-09-09T01:14:31.564590+00:00",
+      "rpm": 1186,
+      "speed_mph": 26.1,
+      "load_pct": 67.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 139,
+      "timestamp": "2026-09-09T01:14:32.782330+00:00",
+      "rpm": 1202,
+      "speed_mph": 25.5,
+      "load_pct": 69.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 140,
+      "timestamp": "2026-09-09T01:14:34.003352+00:00",
+      "rpm": 1203,
+      "speed_mph": 24.9,
+      "load_pct": 69.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 141,
+      "timestamp": "2026-09-09T01:14:35.214163+00:00",
+      "rpm": 1200,
+      "speed_mph": 25.5,
+      "load_pct": 70.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 142,
+      "timestamp": "2026-09-09T01:14:36.432321+00:00",
+      "rpm": 1199,
+      "speed_mph": 24.2,
+      "load_pct": 70.6,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 143,
+      "timestamp": "2026-09-09T01:14:37.634902+00:00",
+      "rpm": 1200,
+      "speed_mph": 24.2,
+      "load_pct": 69.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.24
+    },
+    {
+      "sequence": 144,
+      "timestamp": "2026-09-09T01:14:38.840013+00:00",
+      "rpm": 1275,
+      "speed_mph": 22.4,
+      "load_pct": 52.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 145,
+      "timestamp": "2026-09-09T01:14:40.117451+00:00",
+      "rpm": 1290,
+      "speed_mph": 18.6,
+      "load_pct": 48.2,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.26
+    },
+    {
+      "sequence": 146,
+      "timestamp": "2026-09-09T01:14:41.319306+00:00",
+      "rpm": 910,
+      "speed_mph": 14.9,
+      "load_pct": 55.7,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 147,
+      "timestamp": "2026-09-09T01:14:42.544306+00:00",
+      "rpm": 1153,
+      "speed_mph": 9.3,
+      "load_pct": 69.0,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 148,
+      "timestamp": "2026-09-09T01:14:43.760933+00:00",
+      "rpm": 930,
+      "speed_mph": 6.2,
+      "load_pct": 82.4,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.15
+    },
+    {
+      "sequence": 149,
+      "timestamp": "2026-09-09T01:14:44.964404+00:00",
+      "rpm": 1440,
+      "speed_mph": 3.1,
+      "load_pct": 83.9,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 150,
+      "timestamp": "2026-09-09T01:14:46.165178+00:00",
+      "rpm": 1380,
+      "speed_mph": 5.6,
+      "load_pct": 84.7,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.19
+    },
+    {
+      "sequence": 151,
+      "timestamp": "2026-09-09T01:14:47.374449+00:00",
+      "rpm": 1336,
+      "speed_mph": 6.8,
+      "load_pct": 89.0,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 152,
+      "timestamp": "2026-09-09T01:14:48.592550+00:00",
+      "rpm": 1290,
+      "speed_mph": 11.2,
+      "load_pct": 89.8,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.18
+    },
+    {
+      "sequence": 153,
+      "timestamp": "2026-09-09T01:14:49.827324+00:00",
+      "rpm": 1226,
+      "speed_mph": 13.7,
+      "load_pct": 87.5,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.17
+    },
+    {
+      "sequence": 154,
+      "timestamp": "2026-09-09T01:14:51.036164+00:00",
+      "rpm": 1194,
+      "speed_mph": 16.2,
+      "load_pct": 63.1,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.23
+    },
+    {
+      "sequence": 155,
+      "timestamp": "2026-09-09T01:14:52.232478+00:00",
+      "rpm": 1142,
+      "speed_mph": 14.9,
+      "load_pct": 62.4,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 150.8,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 156,
+      "timestamp": "2026-09-09T01:14:53.432771+00:00",
+      "rpm": 1125,
+      "speed_mph": 12.4,
+      "load_pct": 66.3,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.12
+    },
+    {
+      "sequence": 157,
+      "timestamp": "2026-09-09T01:14:54.635702+00:00",
+      "rpm": 1097,
+      "speed_mph": 9.9,
+      "load_pct": 68.2,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.16
+    },
+    {
+      "sequence": 158,
+      "timestamp": "2026-09-09T01:14:55.831159+00:00",
+      "rpm": 1020,
+      "speed_mph": 6.2,
+      "load_pct": 68.6,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.15
+    },
+    {
+      "sequence": 159,
+      "timestamp": "2026-09-09T01:14:57.054070+00:00",
+      "rpm": 1047,
+      "speed_mph": 5.6,
+      "load_pct": 67.5,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.14
+    },
+    {
+      "sequence": 160,
+      "timestamp": "2026-09-09T01:14:58.247550+00:00",
+      "rpm": 1048,
+      "speed_mph": 6.8,
+      "load_pct": 66.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.13
+    },
+    {
+      "sequence": 161,
+      "timestamp": "2026-09-09T01:14:59.451529+00:00",
+      "rpm": 998,
+      "speed_mph": 5.6,
+      "load_pct": 67.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.13
+    },
+    {
+      "sequence": 162,
+      "timestamp": "2026-09-09T01:15:00.689381+00:00",
+      "rpm": 880,
+      "speed_mph": 5.0,
+      "load_pct": 74.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.11
+    },
+    {
+      "sequence": 163,
+      "timestamp": "2026-09-09T01:15:02.003024+00:00",
+      "rpm": 838,
+      "speed_mph": 3.1,
+      "load_pct": 73.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.1
+    },
+    {
+      "sequence": 164,
+      "timestamp": "2026-09-09T01:15:03.479024+00:00",
+      "rpm": 917,
+      "speed_mph": 1.9,
+      "load_pct": 75.7,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 165,
+      "timestamp": "2026-09-09T01:15:04.688225+00:00",
+      "rpm": 977,
+      "speed_mph": 1.9,
+      "load_pct": 64.3,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 166,
+      "timestamp": "2026-09-09T01:15:05.932921+00:00",
+      "rpm": 907,
+      "speed_mph": 0.0,
+      "load_pct": 65.9,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 167,
+      "timestamp": "2026-09-09T01:15:07.181491+00:00",
+      "rpm": 925,
+      "speed_mph": 0.0,
+      "load_pct": 65.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 168,
+      "timestamp": "2026-09-09T01:15:08.384955+00:00",
+      "rpm": 912,
+      "speed_mph": 0.0,
+      "load_pct": 63.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 169,
+      "timestamp": "2026-09-09T01:15:09.603164+00:00",
+      "rpm": 880,
+      "speed_mph": 0.0,
+      "load_pct": 61.2,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.2
+    },
+    {
+      "sequence": 170,
+      "timestamp": "2026-09-09T01:15:10.792379+00:00",
+      "rpm": 852,
+      "speed_mph": 0.0,
+      "load_pct": 60.8,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 171,
+      "timestamp": "2026-09-09T01:15:11.997731+00:00",
+      "rpm": 2002,
+      "speed_mph": 0.0,
+      "load_pct": 67.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.27
+    },
+    {
+      "sequence": 172,
+      "timestamp": "2026-09-09T01:15:13.194720+00:00",
+      "rpm": 1791,
+      "speed_mph": 0.0,
+      "load_pct": 66.3,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.25
+    },
+    {
+      "sequence": 173,
+      "timestamp": "2026-09-09T01:15:14.398110+00:00",
+      "rpm": 2104,
+      "speed_mph": 0.0,
+      "load_pct": 72.5,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.28
+    },
+    {
+      "sequence": 174,
+      "timestamp": "2026-09-09T01:15:15.600469+00:00",
+      "rpm": 2099,
+      "speed_mph": 0.0,
+      "load_pct": 69.0,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 152.6,
+      "module_voltage_v": 13.28
+    },
+    {
+      "sequence": 175,
+      "timestamp": "2026-09-09T01:15:16.807625+00:00",
+      "rpm": 1509,
+      "speed_mph": 0.0,
+      "load_pct": 56.1,
+      "coolant_temp_f": 177.8,
+      "oil_temp_f": 154.4,
+      "module_voltage_v": 13.26
+    },
+    {
+      "sequence": 176,
+      "timestamp": "2026-09-09T01:15:18.023264+00:00",
+      "rpm": 942,
+      "speed_mph": 0.0,
+      "load_pct": 61.2,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 154.4,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 177,
+      "timestamp": "2026-09-09T01:15:19.254265+00:00",
+      "rpm": 925,
+      "speed_mph": 0.0,
+      "load_pct": 65.1,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 154.4,
+      "module_voltage_v": 13.22
+    },
+    {
+      "sequence": 178,
+      "timestamp": "2026-09-09T01:15:20.512766+00:00",
+      "rpm": 918,
+      "speed_mph": 0.0,
+      "load_pct": 62.7,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 154.4,
+      "module_voltage_v": 13.21
+    },
+    {
+      "sequence": 179,
+      "timestamp": "2026-09-09T01:15:21.727019+00:00",
+      "rpm": 858,
+      "speed_mph": 0.0,
+      "load_pct": 60.4,
+      "coolant_temp_f": 176.0,
+      "oil_temp_f": 154.4,
+      "module_voltage_v": 13.19
+    }
+  ],
+  "events": [
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:11:49.318600+00:00",
+      "sequence": 4,
+      "rule": "High Engine Load",
+      "severity": "warning",
+      "field": "load_pct",
+      "operator": ">",
+      "threshold": 10.0,
+      "value": 47.5,
+      "duration_seconds": 4.005
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:11:49.318600+00:00",
+      "sequence": 4,
+      "rule": "Critical Coolant Temperature",
+      "severity": "critical",
+      "field": "coolant_temp_f",
+      "operator": ">",
+      "threshold": 130.0,
+      "value": 167.0,
+      "duration_seconds": 4.005
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:11:55.340783+00:00",
+      "sequence": 9,
+      "rule": "Elevated Coolant Temperature",
+      "severity": "warning",
+      "field": "coolant_temp_f",
+      "operator": ">",
+      "threshold": 115.0,
+      "value": 167.0,
+      "duration_seconds": 10.027
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:12:09.860390+00:00",
+      "sequence": 21,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 1345.0,
+      "duration_seconds": 2.401
+    },
+    {
+      "type": "cleared",
+      "timestamp": "2026-09-09T01:12:12.261356+00:00",
+      "sequence": 23,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 764.0,
+      "duration_seconds": 4.802,
+      "reason": "condition_cleared"
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:12:15.902740+00:00",
+      "sequence": 26,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 2262.0,
+      "duration_seconds": 2.43
+    },
+    {
+      "type": "cleared",
+      "timestamp": "2026-09-09T01:13:28.784492+00:00",
+      "sequence": 86,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 962.0,
+      "duration_seconds": 75.312,
+      "reason": "condition_cleared"
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:13:32.414035+00:00",
+      "sequence": 89,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 1074.0,
+      "duration_seconds": 2.415
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:14:36.432321+00:00",
+      "sequence": 142,
+      "rule": "High Oil Temperature",
+      "severity": "warning",
+      "field": "oil_temp_f",
+      "operator": ">",
+      "threshold": 150.0,
+      "value": 150.8,
+      "duration_seconds": 6.079
+    },
+    {
+      "type": "cleared",
+      "timestamp": "2026-09-09T01:14:41.319306+00:00",
+      "sequence": 146,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 910.0,
+      "duration_seconds": 71.32,
+      "reason": "condition_cleared"
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:14:47.374449+00:00",
+      "sequence": 151,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 1336.0,
+      "duration_seconds": 2.41
+    },
+    {
+      "type": "cleared",
+      "timestamp": "2026-09-09T01:14:59.451529+00:00",
+      "sequence": 161,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 998.0,
+      "duration_seconds": 14.487,
+      "reason": "condition_cleared"
+    },
+    {
+      "type": "triggered",
+      "timestamp": "2026-09-09T01:15:14.398110+00:00",
+      "sequence": 173,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 2104.0,
+      "duration_seconds": 2.4
+    },
+    {
+      "type": "cleared",
+      "timestamp": "2026-09-09T01:15:18.023264+00:00",
+      "sequence": 176,
+      "rule": "High RPM",
+      "severity": "warning",
+      "field": "rpm",
+      "operator": ">",
+      "threshold": 1000.0,
+      "value": 942.0,
+      "duration_seconds": 6.026,
+      "reason": "condition_cleared"
+    }
+  ]
+}

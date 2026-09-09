@@ -1,0 +1,423 @@
+.telemetry-demo {
+  width: min(1280px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2rem;
+}
+
+.demo-header,
+.vehicle-panel,
+.playback-panel,
+.chart-panel,
+.event-panel,
+.metric-card {
+  background: #1b283c;
+  border: 1px solid #2a3950;
+  border-radius: 16px;
+}
+
+.demo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.eyebrow,
+.panel-label {
+  margin: 0 0 0.4rem;
+  color: #38bdf8;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.demo-header h1 {
+  margin: 0 0 0.4rem;
+  font-size: 2.25rem;
+  line-height: 1.1;
+  color: #f8fafc;
+}
+
+.subtitle {
+  margin: 0;
+  color: #9fb0c7;
+  font-size: 1rem;
+}
+
+.recorded-badge {
+  flex-shrink: 0;
+  border: 1px solid #38bdf8;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  color: #7dd3fc;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.vehicle-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.vehicle-panel h2 {
+  margin: 0;
+  font-size: 1.9rem;
+  color: #f8fafc;
+}
+
+.trip-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.trip-meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 90px;
+}
+
+.trip-meta span {
+  color: #7f93ad;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.trip-meta strong {
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.trip-select {
+  border: 1px solid #46566f;
+  border-radius: 8px;
+  background: #162338;
+  color: #f8fafc;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.3rem 0.5rem;
+}
+
+.playback-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 1.2rem;
+  background: #0b1627;
+}
+
+.playback-panel button {
+  border: 1px solid #46566f;
+  border-radius: 10px;
+  background: #162338;
+  color: #f8fafc;
+  padding: 0.8rem 1rem;
+  min-width: 88px;
+  cursor: pointer;
+}
+
+.playback-panel button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.playback-panel label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f8fafc;
+}
+
+.playback-panel select {
+  border: 1px solid #46566f;
+  border-radius: 8px;
+  background: #162338;
+  color: #f8fafc;
+  padding: 0.55rem 0.7rem;
+}
+
+.progress-shell {
+  flex: 1;
+  height: 8px;
+  background: #20314a;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 35%;
+  height: 100%;
+  background: #60a5fa;
+  border-radius: 999px;
+}
+
+.time-display {
+  color: #c7d2e1;
+  font-size: 0.95rem;
+  min-width: 110px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.metric-card {
+  padding: 1.5rem 1.2rem;
+  background: #101b2d;
+}
+
+.metric-card span {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: #b6c4d7;
+  font-size: 0.95rem;
+}
+
+.metric-card strong {
+  display: block;
+  color: #f8fafc;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.metric-card.powertrain {
+  border-top: 3px solid #38bdf8;
+}
+
+.metric-card.thermal {
+  border-top: 3px solid #fb923c;
+}
+
+.metric-card.electrical {
+  border-top: 3px solid #a78bfa;
+}
+
+.demo-columns {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+.chart-panel,
+.event-panel {
+  padding: 1.3rem;
+  background: #101b2d;
+}
+
+.panel-heading {
+  margin-bottom: 1rem;
+}
+
+.panel-heading h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #f8fafc;
+}
+
+.chart-placeholder,
+.empty-state {
+  min-height: 320px;
+  border: 1px dashed #34465d;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #90a3bb;
+  padding: 1rem;
+  background: #0b1627;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+.chart-card {
+  background: #0b1627;
+  border: 1px solid #20314a;
+  border-radius: 12px;
+  padding: 0.85rem 1rem 0.7rem;
+}
+
+.chart-card.powertrain {
+  border-top: 3px solid #38bdf8;
+}
+
+.chart-card.thermal {
+  border-top: 3px solid #fb923c;
+}
+
+.chart-card.electrical {
+  border-top: 3px solid #a78bfa;
+}
+
+.chart-card-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.chart-card-title {
+  color: #f8fafc;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.chart-card-unit {
+  color: #7f93ad;
+  font-size: 0.78rem;
+}
+
+.chart-card-canvas {
+  position: relative;
+  height: 170px;
+}
+
+.alarm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.alarm-event {
+  background: #0b1627;
+  border: 1px solid #20314a;
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+}
+
+.alarm-event.triggered {
+  border-left-color: #f59e0b;
+}
+
+.alarm-event.cleared {
+  border-left-color: #10b981;
+}
+
+.alarm-event-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.alarm-event-title {
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.alarm-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.alarm-badge.warning {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+}
+
+.alarm-badge.critical {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+}
+
+.alarm-event-meta {
+  color: #b6c4d7;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.alarm-event-phase {
+  margin-top: 0.4rem;
+}
+
+.alarm-event-phase:first-child {
+  margin-top: 0;
+}
+
+.alarm-event-phase-label {
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.demo-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  align-items: center;
+  margin-top: 1.25rem;
+  color: #90a3bb;
+  font-size: 0.95rem;
+}
+
+.demo-footer a {
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .demo-header,
+  .vehicle-panel,
+  .demo-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .demo-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .playback-panel {
+    flex-wrap: wrap;
+  }
+
+  .progress-shell {
+    flex-basis: 100%;
+  }
+
+  .time-display {
+    min-width: auto;
+    text-align: left;
+  }
+}
+
+@media (max-width: 700px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
