@@ -109,6 +109,7 @@ def test_alarm_triggers_after_required_duration():
     assert event["value"] == 1800
     assert event["sequence"] == 2
     assert event["duration_seconds"] == 2.0
+    assert event["duration_requirement_seconds"] == 2
     assert engine.active_alarms() == ["High RPM"]
 
 
@@ -195,6 +196,7 @@ def test_alarm_clears_when_condition_returns_to_normal():
     assert event["value"] == 900
     assert event["reason"] == "condition_cleared"
     assert event["duration_seconds"] == 5.0
+    assert event["duration_requirement_seconds"] == 2
     assert engine.active_alarms() == []
 
 

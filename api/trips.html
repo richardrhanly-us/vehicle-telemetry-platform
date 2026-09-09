@@ -346,6 +346,29 @@
             color: #34d399;
         }
 
+        .alarm-badge.warning {
+            background: rgba(245, 158, 11, 0.16);
+            color: #fbbf24;
+        }
+
+        .alarm-badge.critical {
+            background: rgba(239, 68, 68, 0.18);
+            color: #fca5a5;
+        }
+
+        .alarm-event-phase {
+            margin-top: 6px;
+        }
+
+        .alarm-event-phase:first-child {
+            margin-top: 0;
+        }
+
+        .alarm-event-phase-label {
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
 
         .playback-panel {
             margin-bottom: 24px;
@@ -526,6 +549,50 @@
         let mapChart = null;
         let selectedTripId = null;
         let playbackPollTimer = null;
+
+
+        const TELEMETRY_FIELD_META = {
+            rpm: {
+                canvasId: "rpm-history-chart",
+                label: "RPM",
+                unit: ""
+            },
+            speed_mph: {
+                canvasId: "speed-history-chart",
+                label: "Speed",
+                unit: " mph"
+            },
+            throttle_pct: {
+                canvasId: "throttle-history-chart",
+                label: "Throttle",
+                unit: "%"
+            },
+            load_pct: {
+                canvasId: "load-history-chart",
+                label: "Engine Load",
+                unit: "%"
+            },
+            coolant_temp_f: {
+                canvasId: "coolant-history-chart",
+                label: "Coolant Temperature",
+                unit: "°F"
+            },
+            oil_temp_f: {
+                canvasId: "oil-temp-history-chart",
+                label: "Oil Temperature",
+                unit: "°F"
+            },
+            maf_gps: {
+                canvasId: "maf-history-chart",
+                label: "Mass Air Flow",
+                unit: " g/s"
+            },
+            manifold_pressure_kpa: {
+                canvasId: "map-history-chart",
+                label: "Manifold Pressure",
+                unit: " kPa"
+            }
+        };
 
 
         function formatVehicle(vehicle) {
@@ -1120,7 +1187,237 @@
 
 
 
-        function renderAlarmTimeline(events) {
+        function formatElapsedSeconds(seconds) {
+            if (
+                seconds === null ||
+                seconds === undefined ||
+                Number.isNaN(seconds)
+            ) {
+                return null;
+            }
+
+            const safeSeconds =
+                Math.max(0, Math.round(seconds));
+
+            const minutes =
+                Math.floor(safeSeconds / 60);
+
+            const remainingSeconds =
+                safeSeconds % 60;
+
+            return (
+                String(minutes).padStart(2, "0")
+                + ":"
+                + String(remainingSeconds).padStart(2, "0")
+            );
+        }
+
+
+        function computeElapsedLabel(
+            eventTimestamp,
+            tripStartTimestamp
+        ) {
+            if (!eventTimestamp || !tripStartTimestamp) {
+                return null;
+            }
+
+            const elapsedMs =
+                new Date(eventTimestamp)
+                - new Date(tripStartTimestamp);
+
+            if (Number.isNaN(elapsedMs)) {
+                return null;
+            }
+
+            return formatElapsedSeconds(elapsedMs / 1000);
+        }
+
+
+        function formatFieldValue(field, value) {
+            if (value === null || value === undefined) {
+                return "N/A";
+            }
+
+            const meta = TELEMETRY_FIELD_META[field];
+            const unit = meta ? meta.unit : "";
+
+            return `${value}${unit}`;
+        }
+
+
+        function formatFieldLabel(field) {
+            const meta = TELEMETRY_FIELD_META[field];
+
+            return meta ? meta.label : (field ?? "Value");
+        }
+
+
+        function pairAlarmEvents(events) {
+            const sorted = [...events].sort((a, b) => {
+                const aKey = a.sequence ?? 0;
+                const bKey = b.sequence ?? 0;
+
+                return aKey - bKey;
+            });
+
+            const openByRule = new Map();
+            const groups = [];
+
+            for (const event of sorted) {
+                const ruleName = event.rule ?? "Alarm";
+
+                if (event.type === "cleared") {
+                    const open = openByRule.get(ruleName);
+
+                    if (open) {
+                        open.cleared = event;
+                        openByRule.delete(ruleName);
+                        continue;
+                    }
+
+                    groups.push({
+                        rule: ruleName,
+                        triggered: null,
+                        cleared: event
+                    });
+
+                    continue;
+                }
+
+                const group = {
+                    rule: ruleName,
+                    triggered: event,
+                    cleared: null
+                };
+
+                openByRule.set(ruleName, group);
+                groups.push(group);
+            }
+
+            return groups;
+        }
+
+
+        function renderAlarmGroup(group, tripStartTime) {
+            const primary =
+                group.triggered || group.cleared;
+
+            const severity =
+                (primary.severity || "warning").toLowerCase();
+
+            const resolved = Boolean(group.cleared);
+
+            const containerClass =
+                resolved ? "cleared" : "triggered";
+
+            const badgeClass =
+                severity === "critical"
+                    ? "critical"
+                    : "warning";
+
+            const phases = [];
+
+            if (group.triggered) {
+                const event = group.triggered;
+
+                const elapsed =
+                    computeElapsedLabel(
+                        event.timestamp,
+                        tripStartTime
+                    );
+
+                const requirement =
+                    event.duration_requirement_seconds;
+
+                phases.push(`
+                    <div class="alarm-event-phase">
+                        <span class="alarm-event-phase-label">
+                            Triggered
+                        </span>
+                        ${
+                            elapsed
+                                ? ` at ${elapsed}`
+                                : ""
+                        }
+                        <br>
+                        ${formatFieldLabel(event.field)}:
+                        ${formatFieldValue(
+                            event.field,
+                            event.value
+                        )}
+                        (${event.operator ?? ""}
+                        ${formatFieldValue(
+                            event.field,
+                            event.threshold
+                        )})
+                        ${
+                            requirement !== null
+                            && requirement !== undefined
+                                ? `<br>Duration requirement: `
+                                    + `${requirement} sec`
+                                : ""
+                        }
+                    </div>
+                `);
+            }
+
+            if (group.cleared) {
+                const event = group.cleared;
+
+                const elapsed =
+                    computeElapsedLabel(
+                        event.timestamp,
+                        tripStartTime
+                    );
+
+                phases.push(`
+                    <div class="alarm-event-phase">
+                        <span class="alarm-event-phase-label">
+                            Cleared
+                        </span>
+                        ${
+                            elapsed
+                                ? ` at ${elapsed}`
+                                : ""
+                        }
+                        <br>
+                        Active: ${formatDuration(
+                            event.duration_seconds ?? 0
+                        )}
+                    </div>
+                `);
+            } else if (group.triggered) {
+                phases.push(`
+                    <div class="alarm-event-phase">
+                        <span class="alarm-event-phase-label">
+                            Still active
+                        </span>
+                        at end of trip
+                    </div>
+                `);
+            }
+
+            return `
+                <div class="alarm-event ${containerClass}">
+                    <div class="alarm-event-top">
+                        <div>
+                            <span class="alarm-event-title">
+                                ${group.rule}
+                            </span>
+                            <span class="alarm-badge ${badgeClass}">
+                                ${severity}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="alarm-event-meta">
+                        ${phases.join("")}
+                    </div>
+                </div>
+            `;
+        }
+
+
+        function renderAlarmTimeline(events, tripStartTime) {
             const alarmList =
                 document.getElementById("alarm-list");
 
@@ -1137,49 +1434,241 @@
                 return;
             }
 
-            alarmList.innerHTML = events.map(event => {
-                const eventType =
-                    event.type === "cleared"
-                        ? "cleared"
-                        : "triggered";
+            const groups = pairAlarmEvents(events);
 
-                const value =
-                    event.value === null ||
-                    event.value === undefined
-                        ? "N/A"
-                        : event.value;
+            alarmList.innerHTML = groups
+                .map(
+                    group =>
+                        renderAlarmGroup(
+                            group,
+                            tripStartTime
+                        )
+                )
+                .join("");
+        }
 
-                const threshold =
-                    `${event.operator ?? ""}${event.threshold ?? ""}`;
 
-                return `
-                    <div class="alarm-event ${eventType}">
-                        <div class="alarm-event-top">
-                            <div>
-                                <span class="alarm-event-title">
-                                    ${event.rule ?? "Alarm"}
-                                </span>
-                                <span class="alarm-badge ${eventType}">
-                                    ${eventType}
-                                </span>
-                            </div>
-                            <div class="alarm-event-time">
-                                ${formatDateTime(event.timestamp)}
-                            </div>
-                        </div>
-                        <div class="alarm-event-meta">
-                            Severity: ${event.severity ?? "N/A"}
-                            · Field: ${event.field ?? "N/A"}
-                            · Value: ${value}
-                            · Threshold: ${threshold || "N/A"}
-                            · Sequence: ${event.sequence ?? "N/A"}
-                            · Active: ${formatDuration(
-                                event.duration_seconds ?? 0
-                            )}
-                        </div>
-                    </div>
-                `;
-            }).join("");
+        function buildSampleIndexLookups(samples) {
+            const bySequence = new Map();
+            const byTimestamp = new Map();
+
+            samples.forEach((sample, index) => {
+                if (
+                    sample.sequence !== null
+                    && sample.sequence !== undefined
+                    && !bySequence.has(sample.sequence)
+                ) {
+                    bySequence.set(sample.sequence, index);
+                }
+
+                if (
+                    sample.timestamp
+                    && !byTimestamp.has(sample.timestamp)
+                ) {
+                    byTimestamp.set(sample.timestamp, index);
+                }
+            });
+
+            return { bySequence, byTimestamp };
+        }
+
+
+        function resolveSampleIndex(event, lookups) {
+            if (
+                event.sequence !== null
+                && event.sequence !== undefined
+                && lookups.bySequence.has(event.sequence)
+            ) {
+                return lookups.bySequence.get(event.sequence);
+            }
+
+            if (
+                event.timestamp
+                && lookups.byTimestamp.has(event.timestamp)
+            ) {
+                return lookups.byTimestamp.get(event.timestamp);
+            }
+
+            return null;
+        }
+
+
+        function groupEventsByField(events) {
+            const grouped = {};
+
+            for (const event of events) {
+                if (!event.field) {
+                    continue;
+                }
+
+                if (!grouped[event.field]) {
+                    grouped[event.field] = [];
+                }
+
+                grouped[event.field].push(event);
+            }
+
+            return grouped;
+        }
+
+
+        function formatAlarmTooltipLines(event, tripStartTime) {
+            const elapsed =
+                computeElapsedLabel(
+                    event.timestamp,
+                    tripStartTime
+                );
+
+            if (event.type === "cleared") {
+                return [
+                    `${event.rule ?? "Alarm"} cleared`
+                        + (elapsed ? ` at ${elapsed}` : ""),
+                    `Active: ${formatDuration(
+                        event.duration_seconds ?? 0
+                    )}`
+                ];
+            }
+
+            return [
+                `${event.rule ?? "Alarm"} triggered`
+                    + (elapsed ? ` at ${elapsed}` : ""),
+                `${formatFieldLabel(event.field)}: `
+                    + `${formatFieldValue(
+                        event.field,
+                        event.value
+                    )} `
+                    + `(${event.operator ?? ""}`
+                    + `${formatFieldValue(
+                        event.field,
+                        event.threshold
+                    )})`
+            ];
+        }
+
+
+        function applyAlarmMarkers(
+            chart,
+            samples,
+            fieldEvents,
+            tripStartTime
+        ) {
+            if (!chart || !fieldEvents || !fieldEvents.length) {
+                return;
+            }
+
+            const lookups = buildSampleIndexLookups(samples);
+            const dataLength = samples.length;
+
+            const baseColor =
+                chart.data.datasets[0].borderColor;
+
+            const pointRadius = new Array(dataLength).fill(0);
+            const pointHoverRadius = new Array(dataLength).fill(3);
+            const pointBackgroundColor =
+                new Array(dataLength).fill(baseColor);
+            const pointBorderColor =
+                new Array(dataLength).fill(baseColor);
+            const pointBorderWidth = new Array(dataLength).fill(0);
+
+            const markersByIndex = new Map();
+
+            for (const event of fieldEvents) {
+                const index = resolveSampleIndex(event, lookups);
+
+                if (index === null) {
+                    continue;
+                }
+
+                const isCleared = event.type === "cleared";
+
+                pointRadius[index] = 6;
+                pointHoverRadius[index] = 8;
+                pointBackgroundColor[index] =
+                    isCleared ? "#10b981" : "#f59e0b";
+                pointBorderColor[index] = "#111827";
+                pointBorderWidth[index] = 2;
+
+                if (!markersByIndex.has(index)) {
+                    markersByIndex.set(index, []);
+                }
+
+                markersByIndex.get(index).push(event);
+            }
+
+            if (markersByIndex.size === 0) {
+                return;
+            }
+
+            chart.data.datasets[0].pointRadius = pointRadius;
+            chart.data.datasets[0].pointHoverRadius =
+                pointHoverRadius;
+            chart.data.datasets[0].pointBackgroundColor =
+                pointBackgroundColor;
+            chart.data.datasets[0].pointBorderColor =
+                pointBorderColor;
+            chart.data.datasets[0].pointBorderWidth =
+                pointBorderWidth;
+
+            chart.options.plugins = chart.options.plugins || {};
+            chart.options.plugins.tooltip =
+                chart.options.plugins.tooltip || {};
+            chart.options.plugins.tooltip.callbacks =
+                chart.options.plugins.tooltip.callbacks || {};
+
+            chart.options.plugins.tooltip.callbacks.afterLabel =
+                function (context) {
+                    const marker =
+                        markersByIndex.get(context.dataIndex);
+
+                    if (!marker) {
+                        return undefined;
+                    }
+
+                    return marker
+                        .map(
+                            event =>
+                                formatAlarmTooltipLines(
+                                    event,
+                                    tripStartTime
+                                )
+                        )
+                        .flat();
+                };
+
+            chart.update("none");
+        }
+
+
+        function applyAlarmMarkersToTripCharts(
+            events,
+            samples,
+            tripStartTime,
+            chartsByCanvasId
+        ) {
+            const eventsByField = groupEventsByField(events || []);
+
+            for (const [field, fieldEvents] of Object.entries(
+                eventsByField
+            )) {
+                const meta = TELEMETRY_FIELD_META[field];
+
+                if (!meta) {
+                    continue;
+                }
+
+                const chart = chartsByCanvasId[meta.canvasId];
+
+                if (!chart) {
+                    continue;
+                }
+
+                applyAlarmMarkers(
+                    chart,
+                    samples,
+                    fieldEvents,
+                    tripStartTime
+                );
+            }
         }
 
         function renderTrip(
@@ -1513,7 +2002,7 @@
 
                 <div class="alarm-section">
                     <div class="panel-title">
-                        Alarm Timeline
+                        Alarms &amp; Events
                     </div>
 
                     <div class="alarm-summary">
@@ -1607,7 +2096,10 @@
                 </div>
             `;
 
-            renderAlarmTimeline(events);
+            renderAlarmTimeline(
+                events,
+                metadata.start_time
+            );
             bindPlaybackControls(tripId);
             refreshPlaybackStatus();
 
@@ -1681,6 +2173,24 @@
                 samples,
                 "manifold_pressure_kpa",
                 "#34d399"
+            );
+
+            const chartsByCanvasId = {
+                "rpm-history-chart": rpmChart,
+                "speed-history-chart": speedChart,
+                "throttle-history-chart": throttleChart,
+                "load-history-chart": loadChart,
+                "coolant-history-chart": coolantChart,
+                "oil-temp-history-chart": oilTempChart,
+                "maf-history-chart": mafChart,
+                "map-history-chart": mapChart
+            };
+
+            applyAlarmMarkersToTripCharts(
+                events,
+                samples,
+                metadata.start_time,
+                chartsByCanvasId
             );
         }
 

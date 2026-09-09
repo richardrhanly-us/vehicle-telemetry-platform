@@ -188,6 +188,7 @@ class AlarmEngine:
                 active_seconds,
                 3,
             ),
+            "duration_requirement_seconds": rule.duration_seconds,
         }
 
         if reason is not None:
