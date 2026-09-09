@@ -6,9 +6,10 @@ for command in connection.supported_commands:
     name = str(command.name).upper()
 
     if (
-        "TEMP" in name
-        or "AMBI" in name
-        or "AIR" in name
+        "GEAR" in name
+        or "TRANS" in name
+        or "NEUT" in name
+        or "DRIVE" in name
     ):
         print(command.name)
 

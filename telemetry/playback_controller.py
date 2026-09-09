@@ -86,6 +86,7 @@ class PlaybackController:
         self._recording_start_time = None
         self._elapsed_seconds = 0.0
         self._duration_seconds = 0.0
+        self._vehicle = None
 
     def is_active(self):
         with self._lock:
@@ -114,6 +115,7 @@ class PlaybackController:
                 "start_time": self._recording_start_time,
                 "elapsed_seconds": self._elapsed_seconds,
                 "duration_seconds": self._duration_seconds,
+                "vehicle": self._vehicle,
             }
 
     def start(self, trip_id, speed=1.0):
@@ -148,6 +150,7 @@ class PlaybackController:
             self._recording_start_time = None
             self._elapsed_seconds = 0.0
             self._duration_seconds = 0.0
+            self._vehicle = None
             self._state = "playing"
             self._stop_event = threading.Event()
 
@@ -251,6 +254,8 @@ class PlaybackController:
                     ).total_seconds(),
                 )
 
+            vehicle = metadata.get("vehicle")
+
             with self._lock:
                 self._sample_count = len(samples)
                 self._recording_start_time = metadata.get(
@@ -260,11 +265,10 @@ class PlaybackController:
                 self._duration_seconds = float(
                     recorded_duration
                 )
+                self._vehicle = vehicle
 
             runtime_state.clear_latest_sample()
             runtime_state.clear_alarm_state()
-
-            vehicle = metadata.get("vehicle")
 
             if vehicle:
                 runtime_state.update_vehicle_info(vehicle)
@@ -349,6 +353,7 @@ class PlaybackController:
                 self._thread = None
                 self._stop_event = None
                 self._trip_id = None
+                self._vehicle = None
 
 
 playback_controller = PlaybackController()

@@ -1957,7 +1957,9 @@
 
             tripStatus,
 
-            vehicleStatus
+            vehicleStatus,
+
+            playbackStatus
 
         ) {
 
@@ -1972,9 +1974,6 @@
             vehicleReady =
 
                 vehicleStatus.ready;
-
-            const playbackStatus =
-                tripStatus.playback || {};
 
             currentPlaybackActive =
                 playbackStatus.active || false;
@@ -2024,7 +2023,7 @@
                 );
 
                 const playbackVehicle =
-                    vehicleStatus.vehicle;
+                    playbackStatus.vehicle;
 
                 if (
                     playbackVehicle
@@ -2131,9 +2130,14 @@
 
             );
 
+            const displayVehicle =
+                playbackStatus.active
+                    ? playbackStatus.vehicle
+                    : vehicleStatus.vehicle;
+
             renderVehicle(
 
-                vehicleStatus.vehicle
+                displayVehicle
 
             );
 
@@ -2361,13 +2365,17 @@
 
                     tripResponse,
 
-                    vehicleResponse
+                    vehicleResponse,
+
+                    playbackResponse
 
                 ] = await Promise.all([
 
                     fetch("/api/trip/status"),
 
-                    fetch("/api/vehicle/status")
+                    fetch("/api/vehicle/status"),
+
+                    fetch("/api/playback/status")
 
                 ]);
 
@@ -2379,11 +2387,17 @@
 
                     await vehicleResponse.json();
 
+                const playbackStatus =
+
+                    await playbackResponse.json();
+
                 renderStatus(
 
                     tripStatus,
 
-                    vehicleStatus
+                    vehicleStatus,
+
+                    playbackStatus
 
                 );
 
