@@ -1,7 +1,31 @@
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  background: #08111d;
+  color: #eef4ff;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+body {
+  min-width: 320px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 .telemetry-demo {
   width: min(1320px, calc(100% - 2.5rem));
   margin: 0 auto;
-  padding: 2rem 0 3rem;
+  padding: 2.25rem 0 3rem;
   color: #eef4ff;
 }
 
@@ -15,18 +39,17 @@
   align-items: flex-end;
   gap: 2rem;
   padding: 0 0 1.75rem;
-  margin-bottom: 0;
   border-bottom: 1px solid #334155;
 }
 
 .demo-header > div:first-child {
-  max-width: 850px;
+  max-width: 860px;
 }
 
 .eyebrow,
 .panel-label {
-  margin: 0 0 0.45rem;
-  color: #7f93ad;
+  margin: 0 0 0.5rem;
+  color: #7dd3fc;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -34,16 +57,17 @@
 }
 
 .demo-header h1 {
-  margin: 0 0 0.45rem;
+  margin: 0 0 0.55rem;
   color: #f8fafc;
-  font-size: clamp(2.4rem, 4vw, 4rem);
+  font-size: clamp(2.4rem, 4vw, 3.8rem);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
 }
 
 .subtitle {
   margin: 0;
+  max-width: 780px;
   color: #9fb0c7;
   font-size: 1rem;
   line-height: 1.6;
@@ -51,11 +75,8 @@
 
 .recorded-badge {
   flex-shrink: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: #7dd3fc;
+  padding-bottom: 0.25rem;
+  color: #7f93ad;
   font-size: 0.82rem;
   font-weight: 600;
 }
@@ -69,22 +90,24 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 3rem;
   align-items: end;
-  padding: 1.6rem 0;
-  margin-bottom: 0;
-  border-bottom: 1px solid #26364a;
+  margin-top: 1.25rem;
+  padding: 1.35rem 1.4rem;
+  border: 1px solid #26364a;
+  border-radius: 6px;
+  background: #0d1726;
 }
 
 .vehicle-panel h2 {
   margin: 0;
   color: #f8fafc;
-  font-size: 1.85rem;
+  font-size: 1.8rem;
   font-weight: 700;
 }
 
 .trip-meta {
   display: flex;
-  gap: 2.25rem;
   flex-wrap: wrap;
+  gap: 2.25rem;
 }
 
 .trip-meta div {
@@ -96,9 +119,10 @@
 
 .trip-meta span {
   color: #6f829c;
-  font-size: 0.72rem;
-  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 600;
   letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
 .trip-meta strong {
@@ -109,13 +133,13 @@
 
 .trip-select {
   min-width: 150px;
+  padding: 0.45rem 0.55rem;
   border: 1px solid #40516a;
   border-radius: 4px;
-  background: #0d1726;
+  background: #08111d;
   color: #f8fafc;
   font-size: 0.95rem;
   font-weight: 600;
-  padding: 0.45rem 0.55rem;
 }
 
 /* =========================================================
@@ -126,25 +150,27 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1.25rem 0;
-  margin-bottom: 0;
-  border-bottom: 1px solid #26364a;
-  background: transparent;
+  margin-top: 0.8rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #26364a;
+  border-radius: 6px;
+  background: #0b1422;
 }
 
 .playback-panel button {
+  min-width: 78px;
+  padding: 0.62rem 0.8rem;
   border: 1px solid #40516a;
   border-radius: 4px;
-  background: transparent;
+  background: #101b2b;
   color: #f8fafc;
-  padding: 0.65rem 0.85rem;
-  min-width: 78px;
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
 .playback-panel button:hover:not(:disabled) {
   border-color: #6a7e99;
-  background: #111c2c;
+  background: #152237;
 }
 
 .playback-panel button:disabled {
@@ -161,31 +187,29 @@
 }
 
 .playback-panel select {
+  padding: 0.5rem 0.6rem;
   border: 1px solid #40516a;
   border-radius: 4px;
-  background: #0d1726;
+  background: #08111d;
   color: #f8fafc;
-  padding: 0.5rem 0.6rem;
 }
 
 .progress-shell {
   flex: 1;
   height: 5px;
-  background: #1b2a3f;
-  border-radius: 0;
   overflow: hidden;
+  background: #1b2a3f;
 }
 
 .progress-bar {
   height: 100%;
   background: #38bdf8;
-  border-radius: 0;
 }
 
 .time-display {
+  min-width: 110px;
   color: #c7d2e1;
   font-size: 0.9rem;
-  min-width: 110px;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -198,17 +222,19 @@
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0;
-  margin: 0;
-  border-bottom: 1px solid #26364a;
+  margin-top: 0.8rem;
+  overflow: hidden;
+  border: 1px solid #26364a;
+  border-radius: 6px;
+  background: #0b1422;
 }
 
 .metric-card {
   position: relative;
-  padding: 1.35rem 1rem 1.45rem;
-  background: transparent;
+  padding: 1.15rem 1rem 1.25rem;
   border: 0;
   border-right: 1px solid #26364a;
-  border-radius: 0;
+  background: transparent;
 }
 
 .metric-card:last-child {
@@ -218,8 +244,8 @@
 .metric-card::before {
   position: absolute;
   top: 0;
-  left: 1rem;
-  right: 1rem;
+  right: 0.85rem;
+  left: 0.85rem;
   height: 2px;
   content: "";
   background: #334155;
@@ -239,15 +265,15 @@
 
 .metric-card span {
   display: block;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.5rem;
   color: #8293a9;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
 }
 
 .metric-card strong {
   display: block;
   color: #f8fafc;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -258,17 +284,17 @@
 
 .demo-columns {
   display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(280px, 0.8fr);
-  gap: 2rem;
-  padding-top: 2rem;
+  grid-template-columns: minmax(0, 2.2fr) minmax(300px, 0.8fr);
+  gap: 1rem;
+  padding-top: 1rem;
 }
 
 .chart-panel,
 .event-panel {
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
+  padding: 1.2rem;
+  border: 1px solid #26364a;
+  border-radius: 6px;
+  background: #0d1726;
 }
 
 .panel-heading {
@@ -280,21 +306,21 @@
 .panel-heading h2 {
   margin: 0;
   color: #f8fafc;
-  font-size: 1.7rem;
+  font-size: 1.65rem;
   font-weight: 700;
 }
 
 .chart-placeholder,
 .empty-state {
   min-height: 220px;
-  border: 1px dashed #34465d;
-  border-radius: 4px;
   display: grid;
   place-items: center;
-  text-align: center;
-  color: #90a3bb;
   padding: 1rem;
-  background: transparent;
+  border: 1px dashed #34465d;
+  border-radius: 4px;
+  background: #08111d;
+  color: #90a3bb;
+  text-align: center;
 }
 
 /* =========================================================
@@ -304,21 +330,26 @@
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem;
+  gap: 1.15rem;
 }
 
 .chart-card {
-  padding: 0 0 1rem;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid #26364a;
-  border-radius: 0;
+  padding: 0.85rem 0.9rem 0.75rem;
+  border: 1px solid #20314a;
+  border-radius: 4px;
+  background: #08111d;
 }
 
-.chart-card.powertrain,
-.chart-card.thermal,
+.chart-card.powertrain {
+  border-top: 2px solid #38bdf8;
+}
+
+.chart-card.thermal {
+  border-top: 2px solid #fb923c;
+}
+
 .chart-card.electrical {
-  border-top: 0;
+  border-top: 2px solid #a78bfa;
 }
 
 .chart-card-heading {
@@ -337,12 +368,12 @@
 
 .chart-card-unit {
   color: #6f829c;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
 }
 
 .chart-card-canvas {
   position: relative;
-  height: 200px;
+  height: 210px;
 }
 
 /* =========================================================
@@ -352,16 +383,15 @@
 .alarm-list {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 0.65rem;
 }
 
 .alarm-event {
-  padding: 1rem 0 1rem 0.9rem;
-  background: transparent;
-  border: 0;
+  padding: 0.9rem 0.95rem;
+  border: 1px solid #20314a;
   border-left: 3px solid #334155;
-  border-bottom: 1px solid #26364a;
-  border-radius: 0;
+  border-radius: 4px;
+  background: #08111d;
 }
 
 .alarm-event.triggered {
@@ -381,8 +411,8 @@
 }
 
 .alarm-event-title {
-  font-weight: 700;
   color: #f8fafc;
+  font-weight: 700;
 }
 
 .alarm-badge {
@@ -419,8 +449,8 @@
 }
 
 .alarm-event-phase-label {
-  font-weight: 700;
   color: #f8fafc;
+  font-weight: 700;
 }
 
 /* =========================================================
@@ -429,14 +459,18 @@
 
 .demo-footer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  align-items: center;
-  margin-top: 2rem;
-  padding-top: 1.25rem;
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
   border-top: 1px solid #26364a;
   color: #8293a9;
   font-size: 0.9rem;
+}
+
+.demo-footer p {
+  margin: 0;
 }
 
 .demo-footer a {
@@ -453,7 +487,7 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .metric-card:nth-child(3) {
+  .metric-card:nth-child(3n) {
     border-right: 0;
   }
 
@@ -467,16 +501,14 @@
 }
 
 @media (max-width: 900px) {
-  .demo-header,
-  .vehicle-panel,
-  .demo-footer {
-    grid-template-columns: 1fr;
+  .demo-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .demo-header {
-    align-items: flex-start;
+  .vehicle-panel {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
   }
 
   .trip-meta {
@@ -495,6 +527,11 @@
     min-width: auto;
     text-align: left;
   }
+
+  .demo-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 700px) {
@@ -506,12 +543,16 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .metric-card:nth-child(3n) {
+    border-right: 1px solid #26364a;
+  }
+
   .metric-card:nth-child(2n) {
     border-right: 0;
   }
 
-  .metric-card:nth-child(3) {
-    border-right: 1px solid #26364a;
+  .metric-card:nth-child(-n + 4) {
+    border-bottom: 1px solid #26364a;
   }
 
   .chart-grid {
@@ -520,6 +561,10 @@
 }
 
 @media (max-width: 500px) {
+  .demo-header h1 {
+    font-size: 2.15rem;
+  }
+
   .metric-grid {
     grid-template-columns: 1fr;
   }
