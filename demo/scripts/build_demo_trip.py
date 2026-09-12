@@ -26,10 +26,9 @@ OUTPUT_DIR = REPO_ROOT / "demo" / "public" / "trips"
 # bundle another trip, no other code changes required.
 TRIP_CONFIGS = [
     {
-        # ~2:36, 0.75 mi, 128 samples, max speed ~31 mph, max RPM ~2973 —
-        # a real road-test drive with actual movement and no alarm events
-        # (no _events.jsonl file exists for it).
-        "trip_id": "2026-09-09_01-21-06",
+        # Latest real-world road test recorded after connection-handling fixes.
+        # Includes the matching persisted alarm-event file for this drive.
+        "trip_id": "2026-09-12_22-36-41",
         "slug": "road-test",
         "label": "Road Test",
     },
