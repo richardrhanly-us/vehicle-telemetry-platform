@@ -1,5 +1,6 @@
 import obd
 
+
 connection = obd.OBD("COM3")
 
 for command in connection.supported_commands:

@@ -31,6 +31,9 @@ CONNECTION_FAILURE_THRESHOLD = 2
 CONNECTION_ATTEMPTS = 3
 CONNECTION_RETRY_DELAY_SECONDS = 1.0
 
+MAX_VALID_SAMPLE_DURATION_MS = 10_000
+RECONNECT_DELAY_SECONDS = 2.0
+
 load_dotenv()
 
 OBD_PORT = os.getenv("OBD_PORT", "COM3")
@@ -499,8 +502,10 @@ def run_collector(
             )
 
             sequence = 0
+            logged_sample_count = 0
             previous_timestamp = None
             previous_speed_mph = None
+            last_valid_timestamp = None
             distance_miles = 0.0
             moving_time_seconds = 0.0
             stopped_time_seconds = 0.0
@@ -527,23 +532,44 @@ def run_collector(
                     previous_timestamp,
                 )
 
+
+                sample_timed_out = (
+                    sample.sample_duration_ms
+                    > MAX_VALID_SAMPLE_DURATION_MS
+                )
+
                 connection_lost = (
                     not connection.is_connected()
                     or sample.query_failures == 4
+                    or sample_timed_out
                 )
 
                 if connection_lost:
                     consecutive_connection_failures += 1
-                else:
-                    consecutive_connection_failures = 0
 
-                if (
-                    consecutive_connection_failures
-                    >= CONNECTION_FAILURE_THRESHOLD
-                ):
-                    raise RuntimeError(
-                        "OBD-II vehicle disconnected."
+                    print(
+                        "Telemetry sample rejected: "
+                        f"failures={sample.query_failures}, "
+                        f"duration_ms={sample.sample_duration_ms}, "
+                        f"connection={connection.status()}"
                     )
+
+                    if (
+                        consecutive_connection_failures
+                        >= CONNECTION_FAILURE_THRESHOLD
+                    ):
+                        raise RuntimeError(
+                            "OBD-II vehicle disconnected."
+                        )
+
+                    stop_event.wait(
+                        RECONNECT_DELAY_SECONDS
+                    )
+
+                    continue
+
+                consecutive_connection_failures = 0
+
 
                 if sample.query_failures < 4:
                     alarm_events = (
@@ -633,6 +659,9 @@ def run_collector(
                     trip_file,
                     sample,
                 )
+
+                logged_sample_count += 1
+                last_valid_timestamp = sample.timestamp
 
                 if on_sample is not None:
                     on_sample(sample)
@@ -724,15 +753,17 @@ def run_collector(
         finally:
             if connection is not None:
                 if "start_time" in locals():
-                    end_time = datetime.now(
-                        timezone.utc
+                    end_time = (
+                        last_valid_timestamp
+                        if last_valid_timestamp is not None
+                        else datetime.now(timezone.utc)
                     )
 
                     write_trip_metadata(
                         metadata_file,
                         start_time,
                         end_time,
-                        sequence,
+                        logged_sample_count,
                         max_rpm,
                         max_speed_mph,
                         total_rpm,

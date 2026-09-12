@@ -1,0 +1,29 @@
+11-bit CAN ID survey
+Protocol: AUTO, ISO 15765-4 (CAN 11/500)
+
+000-0FF
+  none
+
+100-1FF
+  none
+
+200-2FF
+  none
+
+300-3FF
+  none
+
+400-4FF
+  4E0: 4960
+
+500-5FF
+  none
+
+600-6FF
+  none
+
+700-7FF
+  none
+
+All unique IDs:
+  4E0: 4960

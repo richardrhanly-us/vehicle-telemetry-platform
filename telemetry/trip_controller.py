@@ -10,6 +10,7 @@ from telemetry.collector import (
 
 
 PRESENCE_CHECK_INTERVAL_SECONDS = 3
+PRESENCE_FAILURE_THRESHOLD = 3
 
 
 class TripController:
@@ -241,6 +242,8 @@ class TripController:
                 self._scan_thread = None
 
     def _presence_monitor(self):
+        consecutive_presence_failures = 0
+
         while not (
             self._presence_stop_event
             .is_set()
@@ -269,6 +272,7 @@ class TripController:
                 )
 
             if not should_check:
+                consecutive_presence_failures = 0
                 continue
 
             connected = (
@@ -276,6 +280,21 @@ class TripController:
             )
 
             if connected:
+                consecutive_presence_failures = 0
+                continue
+
+            consecutive_presence_failures += 1
+
+            print(
+                "Vehicle presence check failed "
+                f"({consecutive_presence_failures}/"
+                f"{PRESENCE_FAILURE_THRESHOLD})."
+            )
+
+            if (
+                consecutive_presence_failures
+                < PRESENCE_FAILURE_THRESHOLD
+            ):
                 continue
 
             print(
@@ -294,6 +313,8 @@ class TripController:
                 runtime_state.clear_vehicle_info()
                 runtime_state.clear_latest_sample()
                 runtime_state.clear_alarm_state()
+
+            consecutive_presence_failures = 0
 
     def _run_trip(
         self,
